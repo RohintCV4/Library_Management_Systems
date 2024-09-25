@@ -1,0 +1,10 @@
+.background {
+    background-image: url("../asset/Library\ Image.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
