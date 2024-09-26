@@ -2,6 +2,7 @@ package com.management.library.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table
+@Builder
 public class Category {
 
     @Id

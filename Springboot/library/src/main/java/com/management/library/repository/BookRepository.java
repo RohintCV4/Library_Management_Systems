@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface BookRepository extends JpaRepository<Book,String> {
 //    List<Book> findByCategoryId(Long CategoryId);
@@ -22,5 +24,6 @@ public interface BookRepository extends JpaRepository<Book,String> {
             "(:search IS NULL OR c.name LIKE %:search%)")
     Page<Book> searchBooks(@Param("search") String search, Pageable pageable);
 
-
+    @Query("SELECT b FROM Book b WHERE b.available >= 1")
+    List<Book> findAllAvailableBook();
 }

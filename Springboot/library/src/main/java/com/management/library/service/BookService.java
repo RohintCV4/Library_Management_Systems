@@ -12,11 +12,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.security.auth.login.AccountNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BookService {
@@ -26,14 +27,15 @@ public class BookService {
     @Autowired
     public CategoryRepository categoryRepository;
 
-    public Book createBook(Book book){
-        return this.bookRepository.save(book);
+    public Book createBook(Book book, String categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found"));
+        book.setCategory(category); // Set category in book
+        return bookRepository.save(book);
     }
 
-    public List<Book> getBook(){
-        return this.bookRepository.findAll();
+    public List<Book> getBook() {
+        return this.bookRepository.findAllAvailableBook();
     }
-
 
 
     public List<BookDTO> searchBooks(String search, Integer page, Integer size, String sortField, String sortDirection) {
@@ -48,8 +50,8 @@ public class BookService {
             dto.setPublisher(book.getPublisher());
             dto.setName(book.getName());
             dto.setAuthorName(book.getAuthorName());
-            dto.setPrice(book.getPrice());
-            dto.setCategoryName(book.getCategory().getName());
+
+
             BookDTOs.add(dto);
         }
         return BookDTOs;
@@ -64,7 +66,6 @@ public class BookService {
                     if (book.getAvailable() != null) existingBook.setAvailable(book.getAvailable());
                     if (book.getAuthorName() != null) existingBook.setAuthorName(book.getAuthorName());
                     if (book.getPublisher() != null) existingBook.setPublisher(book.getPublisher());
-                    if (book.getPrice() != null) existingBook.setPrice(book.getPrice());
                     return bookRepository.save(existingBook);
                 })
                 .orElseThrow(() -> new AccountNotFoundException("Id not found"));

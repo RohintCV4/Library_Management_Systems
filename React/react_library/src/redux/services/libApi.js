@@ -51,8 +51,14 @@ export const libApi = createApi({
                 body: data,
             }),
             invalidatesTags:['Library']
+        }),
+
+        getBooks:build.query({
+            query:()=>"auth/get-book",
+            
+            providesTags:['Library']
         })
 
     })
 })
-export const {useAddSignupVisitorsMutation,useAddLoginMutation,useGetVisitorsQuery,useUpdateVisitorsMutation}=libApi;
+export const {useAddSignupVisitorsMutation,useAddLoginMutation,useGetVisitorsQuery,useUpdateVisitorsMutation,useGetBooksQuery}=libApi;

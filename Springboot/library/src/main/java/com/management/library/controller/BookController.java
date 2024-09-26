@@ -3,11 +3,16 @@ package com.management.library.controller;
 import com.management.library.dto.BookDTO;
 import com.management.library.dto.ResponseDTO;
 import com.management.library.entity.Book;
+import com.management.library.entity.Category;
+import com.management.library.repository.CategoryRepository;
 import com.management.library.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.security.auth.login.AccountNotFoundException;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -15,11 +20,35 @@ import java.util.List;
 public class BookController {
     @Autowired
     public BookService bookService;
+    @Autowired
+    public CategoryRepository categoryRepository;
 
     @PostMapping("/create-book")
-    public ResponseDTO createBook(@RequestBody Book book){
-        return ResponseDTO.builder().data(this.bookService.createBook(book)).message("Book created successfully").statusCode(201).build();
+    public ResponseDTO createBook(@RequestParam("name") String name,
+                                  @RequestParam("isbn") String isbn,
+                                  @RequestParam("author") String author,
+                                  @RequestParam("image") MultipartFile image,
+                                  @RequestParam("available") Long available,
+                                  @RequestParam("publisher") String publisher,
+                                  @RequestParam("categoryId") String categoryId) throws IOException {
+        Book book = new Book();
+        book.setName(name);
+        book.setIsbn(isbn);
+        book.setAuthorName(author);
+        book.setImageData(image.getBytes());
+        book.setAvailable(available);
+        book.setPublisher(publisher);
+
+        Book savedBook = bookService.createBook(book, categoryId);
+
+        return ResponseDTO.builder()
+                .data(savedBook)
+                .message("Book created successfully")
+                .statusCode(201)
+                .build();
     }
+
+
 
     @GetMapping("/get-book")
     public ResponseDTO getBook(){

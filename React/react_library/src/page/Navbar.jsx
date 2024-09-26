@@ -7,15 +7,18 @@ import '../asset/Navbar.css';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
   const [userName, setUserName] = useState('');
   const [id, setId] = useState('');
-  const dropdownRef = useRef(null); 
+  const dropdownRef = useRef(null);
+  const navbarRef = useRef(null);  
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
   };
 
   const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen); 
     if (dropdownRef.current) {
       const isDropdownVisible = dropdownRef.current.classList.contains('show');
       if (isDropdownVisible) {
@@ -27,8 +30,14 @@ const Navbar = () => {
   };
 
   const handleClickOutside = (event) => {
+
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       dropdownRef.current.classList.remove('show');
+      setIsDropdownOpen(false);
+    }
+
+    if (navbarRef.current && !navbarRef.current.contains(event.target) && isOpen) {
+      setIsOpen(false);
     }
   };
 
@@ -38,14 +47,14 @@ const Navbar = () => {
     if (token) {
       const tokenParts = token.split('.');
       if (tokenParts.length === 3) {
-        const payloadBase64 = tokenParts[1]; 
-        const decodedPayload = atob(payloadBase64); 
+        const payloadBase64 = tokenParts[1];
+        const decodedPayload = atob(payloadBase64);
         const payload = JSON.parse(decodedPayload);
 
         setUserName(payload.user_name);
         setId(payload.user_id);
         console.log('User Name:', payload.user_name);
-        console.log('User id:', payload.user_id); 
+        console.log('User id:', payload.user_id);
       }
     }
   }, []);
@@ -56,7 +65,7 @@ const Navbar = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [isOpen]); 
 
   const brandTextStyle = {
     fontSize: '1.7rem',
@@ -68,7 +77,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className={`navbar navbar-expand-lg bg-body-tertiary ${isOpen ? 'show' : ''}`}>
+      <nav className={`navbar navbar-expand-lg bg-body-tertiary ${isOpen ? 'show' : ''}`} ref={navbarRef}>
         <div className="container-fluid">
           <span
             className="navbar-brand"
@@ -114,16 +123,16 @@ const Navbar = () => {
                   onClick={toggleDropdown}
                 >
                   {userName}
+                  
                   <Icon
-                    icon="mingcute:down-line"
+                    icon={isDropdownOpen ? "mingcute:up-line" : "mingcute:down-line"}
                     className="ms-2"
                   />
                 </Link>
                 <ul className="dropdown-menu">
-                  
                   <li><Link className="dropdown-item" to={`/library/profileupdate/${id}`}>Profile</Link></li>
                   <li><Link className="dropdown-item" to="#">Another action</Link></li>
-                  <li><hr className="dropdown-divider"/></li>
+                  <li><hr className="dropdown-divider" /></li>
                   <li><Link className="dropdown-item" to="/signin">Logout</Link></li>
                 </ul>
               </li>
