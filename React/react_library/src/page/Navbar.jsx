@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Icon } from '@iconify/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import '../asset/Navbar.css';
@@ -12,6 +12,7 @@ const Navbar = () => {
   const [id, setId] = useState('');
   const dropdownRef = useRef(null);
   const navbarRef = useRef(null);  
+  const navigate = useNavigate();
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
@@ -29,8 +30,9 @@ const Navbar = () => {
     }
   };
 
-  const handleClickOutside = (event) => {
 
+
+  const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       dropdownRef.current.classList.remove('show');
       setIsDropdownOpen(false);
@@ -41,8 +43,9 @@ const Navbar = () => {
     }
   };
 
+  // Fetch user information from the token
   useEffect(() => {
-    const token = localStorage.getItem("Token");
+    const token = sessionStorage.getItem("Token");
 
     if (token) {
       const tokenParts = token.split('.');
@@ -55,9 +58,13 @@ const Navbar = () => {
         setId(payload.user_id);
         console.log('User Name:', payload.user_name);
         console.log('User id:', payload.user_id);
+      } else {
+        navigate("/signin");
       }
+    } else {
+      navigate("/signin");
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -108,10 +115,10 @@ const Navbar = () => {
                 <Link className="nav-link text-dark" to="/library/book">Home</Link>
               </li>
               <li className="nav-item me-5">
-                <Link className="nav-link text-dark" to="#purchased">Purchased</Link>
+                <Link className="nav-link text-dark" to={`/library/purchase/${id}`}>Purchased</Link>
               </li>
               <li className="nav-item me-5">
-                <Link className="nav-link text-dark" to="#return">Returned</Link>
+                <Link className="nav-link text-dark" to={`/library/return/${id}`}>Returned</Link>
               </li>
               <li className="nav-item dropdown me-5" ref={dropdownRef}>
                 <Link

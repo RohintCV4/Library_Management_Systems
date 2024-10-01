@@ -38,10 +38,10 @@ export const libApi = createApi({
                 method : "GET",
                 providesTags:['Library']
             }),
-            transformResponse: (response) =>{
-                console.log(response,"hbh");
+            // transformResponse: (response) =>{
+            //     console.log(response,"hbh");
                 
-            },       
+            // },       
         }),
 
         updateVisitors:build.mutation({
@@ -57,8 +57,30 @@ export const libApi = createApi({
             query:()=>"auth/get-book",
             
             providesTags:['Library']
-        })
+        }),
+
+        getPurchase:build.query({
+            query:(id)=>`event/borrowed/${id}`,
+            
+            providesTags:['Library']
+        }),
+
+        addReturnBook:build.mutation({
+            query:(id) =>({
+                url:`event/return/${id}`,
+                method : "POST",    
+            }),
+            invalidatesTags:['Library']
+        }),
+
+        addborrowbook: build.mutation({
+            query: ({ id, selectedBooks }) => ({
+                url: `event/borrow/multiple/${id}`, // Use id in the URL
+                method: "POST",
+                body: { bookId: selectedBooks }, // Send selectedBooks as part of request body
+            }),
+        }),
 
     })
 })
-export const {useAddSignupVisitorsMutation,useAddLoginMutation,useGetVisitorsQuery,useUpdateVisitorsMutation,useGetBooksQuery}=libApi;
+export const {useAddSignupVisitorsMutation,useAddLoginMutation,useGetVisitorsQuery,useUpdateVisitorsMutation,useGetBooksQuery,useAddborrowbookMutation,useGetPurchaseQuery,useAddReturnBookMutation}=libApi;

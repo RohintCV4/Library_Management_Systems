@@ -1,40 +1,44 @@
-import React, { useEffect } from 'react';
+// import React from 'react'
+
+// const ReturnBook = () => {
+//   return (
+//     <div>ReturnBook</div>
+//   )
+// }
+
+// export default ReturnBook
+import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAddReturnBookMutation, useGetPurchaseQuery } from '../redux/services/libApi';
 
-const Purchase = () => {
+const ReturnBook = () => {
   const { id } = useParams();
   const { data: purchase } = useGetPurchaseQuery(id);
-  // const[returnData]=useAddReturnBookMutation();
-  // const navigate=useNavigate();
-  // const handleReturn = (bookId) => {
-  //   console.log(`Returning book with ID: ${bookId}`);
-  //   returnData(bookId)
-  //   // navigate(`library/return/${id}`);
-  // };
-useEffect(()=>{
-  if (purchase) {
-    console.log('Purchase data:', purchase); // You can perform any side effect here
-  }
+  const[returnData]=useAddReturnBookMutation();
+  const navigate=useNavigate();
+  const handleReturn = (bookId) => {
+    console.log(`Returning book with ID: ${bookId}`);
+    returnData(bookId)
+    // navigate(`library/return/${id}`);
+  };
 
-},[purchase])
   return (
     <div className="container mt-5">
       <div className="card border-0 shadow-sm rounded-4">
         <div className="card-header bg-primary text-white">
-          <h3 className="mb-0">Purchased Books</h3>
+          <h3 className="mb-0">Return Books</h3>
         </div>
         <div className="card-body p-4 bg-light rounded-4">
           <div className="table-responsive">
             <table className="table table-hover">
               <thead className="table-dark">
                 <tr>
-                  <th>S.Num</th>
+                  <th>S.No</th>
                   <th>Book Name</th>
                   <th>Author Name</th>
                   <th>Publisher</th>
                   <th>Category</th>
-                  {/* <th>Action</th> */}
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -45,7 +49,7 @@ useEffect(()=>{
                     <td>{val?.book?.authorName}</td>
                     <td>{val?.book?.publisher}</td>
                    <td>{val?.book?.category?.name}</td> 
-                   {/* {console.log(val.id)}
+                   {console.log(val.id)}
                     <td>
                       <button
                         className="btn btn-warning btn-sm"
@@ -54,7 +58,7 @@ useEffect(()=>{
                       >
                         Return
                       </button>
-                    </td> */}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -66,4 +70,4 @@ useEffect(()=>{
   );
 };
 
-export default Purchase;
+export default ReturnBook;

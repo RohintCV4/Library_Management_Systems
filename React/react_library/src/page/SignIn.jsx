@@ -17,14 +17,18 @@ const SignIn = () => {
     const[login]=useAddLoginMutation();
 
     useEffect(() => {
+        sessionStorage.removeItem('Token');
         localStorage.removeItem('Token');
     }, [])
     const onSubmit = async (data) => {
         try {
-
             const result = await login(data);
+            if (result.error) {
+                toast.error("Email or password is incorrect. Please try again.", { autoClose: 1500 });
+                return;
+            }
             const token = result?.data?.token;
-            localStorage.setItem('Token', token);
+            sessionStorage.setItem('Token', token);
             toast.success("Login done Successfully", { autoClose: 500 });
 
             setTimeout(() => {

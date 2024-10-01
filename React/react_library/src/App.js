@@ -9,6 +9,8 @@ import Book from './page/Book';
 // import Navbar from './page/Navbar';
 import Layout from './page/Layout';
 import ProfileUpdate from './page/ProfileUpdate';
+import Purchase from './page/Purchase';
+import ReturnBook from './page/ReturnBook';
 
 function App() {
   return (
@@ -18,7 +20,9 @@ function App() {
         <Route path='/signin' element={<SignIn />}/>
         <Route path='/library' element={<Layout />}>
         <Route path='/library/book' element={<Book />}/>
-        <Route path="/library/profileupdate/:id" element={<ProfileUpdate />} />
+        <Route path='/library/profileupdate/:id' element={<ProfileUpdate />} />
+        <Route path='/library/purchase/:id' element={<Purchase />}/>
+        <Route path='/library/return/:id' element={<ReturnBook />}/>
         </Route>
         {/* <Route path='/navbar' element={<Navbar />}/> */}
       </Routes>
