@@ -1,23 +1,22 @@
 import React, { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useAddReturnBookMutation, useGetPurchaseQuery } from '../redux/services/libApi';
+import {useParams } from 'react-router-dom';
+import {useGetPurchaseQuery } from '../redux/services/libApi';
 
 const Purchase = () => {
   const { id } = useParams();
-  const { data: purchase } = useGetPurchaseQuery(id);
-  // const[returnData]=useAddReturnBookMutation();
-  // const navigate=useNavigate();
-  // const handleReturn = (bookId) => {
-  //   console.log(`Returning book with ID: ${bookId}`);
-  //   returnData(bookId)
-  //   // navigate(`library/return/${id}`);
-  // };
-useEffect(()=>{
-  if (purchase) {
-    console.log('Purchase data:', purchase); // You can perform any side effect here
-  }
+  const { data: purchase, refetch } = useGetPurchaseQuery(id);
 
-},[purchase])
+  // Refetch data when the component mounts or when id changes
+  useEffect(() => {
+    refetch();
+  }, [id, refetch]); 
+
+  useEffect(() => {
+    if (purchase) {
+      console.log('Purchase data:', purchase); // Perform any side effects here
+    }
+  }, [purchase]);
+
   return (
     <div className="container mt-5">
       <div className="card border-0 shadow-sm rounded-4">
@@ -34,27 +33,16 @@ useEffect(()=>{
                   <th>Author Name</th>
                   <th>Publisher</th>
                   <th>Category</th>
-                  {/* <th>Action</th> */}
                 </tr>
               </thead>
               <tbody>
-                {purchase?.data?.slice(0,3)?.map((val, index) => (
+                {purchase?.data?.slice(0, 3)?.map((val, index) => (
                   <tr key={index}>
                     <td>{index + 1}</td>
                     <td>{val?.book?.name}</td>
                     <td>{val?.book?.authorName}</td>
                     <td>{val?.book?.publisher}</td>
-                   <td>{val?.book?.category?.name}</td> 
-                   {/* {console.log(val.id)}
-                    <td>
-                      <button
-                        className="btn btn-warning btn-sm"
-                        onClick={() => handleReturn(val?.id)}
-                        // onClick={() => navigate(`library/return/${val?.id}`)} 
-                      >
-                        Return
-                      </button>
-                    </td> */}
+                    <td>{val?.book?.category?.name}</td> 
                   </tr>
                 ))}
               </tbody>

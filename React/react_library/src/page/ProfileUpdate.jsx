@@ -36,12 +36,12 @@ const ProfileUpdate = () => {
       const updateData = {
         name: data.name,
         address: data.address,
-        phone: data.phone, // Matches the form input's name
+        phoneNumber: data.phoneNumber, 
       };
       
       await updateVisitors({ id, data: updateData });
       toast.success('Profile updated successfully!');
-      navigate('/profile'); // Redirect or take appropriate action
+      // navigate('/profile'); 
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error('Unable to update profile.');
