@@ -33,15 +33,21 @@ public class JWTServiceImpl {
                 .claim("role", role)
                 .claim("user_id",id)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
                 .signWith(getSignKey())
                 .compact();
     }
 
-    public String generateRefreshToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+    public String generateRefreshToken(UserDetails userDetails) {
+        User user = (User) userDetails;
+        String name = user.getName();
+        String role = user.getRole();
+        String id=user.getId();
         return Jwts.builder()
-                .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
+                .claim("user_name", name)
+                .claim("role", role)
+                .claim("user_id",id)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
                 .signWith(getSignKey())

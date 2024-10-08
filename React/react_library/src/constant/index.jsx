@@ -66,6 +66,27 @@ export const signInSchema = yup.object().shape({
     .required('Password is required')
 })
 
+export const updateSchema = yup.object().shape({
+  name: yup
+    .string()
+    .required('Name is required')
+    .min(3, 'Name must be at least 3 characters long')
+    .max(50, 'Name must be less than 50 characters'),
+    address: yup
+    .string()
+    .required('Address is required')
+    .min(5, 'Address must be at least 5 characters long')
+    .max(100, 'Address must be less than 100 characters'),
+
+  phoneNumber: yup
+    .string()
+    .required('Phone number is required')
+    .matches(
+      /^(\+?\d{1,4})?\s?\d{10}$/,
+      'Phone number must be a valid 10-digit number or include a valid international code'
+    ),
+})
+
 export const updateField=[
   { label: "Name", type: "text", name: "name"},
   { label: "Address", type: "textarea", name: "address"},

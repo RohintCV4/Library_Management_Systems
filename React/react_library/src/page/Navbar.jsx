@@ -1,52 +1,52 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Icon } from '@iconify/react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import '../asset/Navbar.css';
+import '../asset/css/Navbar.css';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userName, setUserName] = useState('');
   const [id, setId] = useState('');
+  const [isUsernameClicked, setIsUsernameClicked] = useState(false); // Track if username is clicked
+
   const dropdownRef = useRef(null);
-  const navbarRef = useRef(null);  
+  const navbarRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation(); // Get current location
+
+  // Determine active nav item based on current path
+  const getActiveNavItem = () => {
+    const path = location.pathname;
+    if (path.includes('purchase')) return 'purchased';
+    if (path.includes('return')) return 'returned';
+    if (path.includes('profileupdate')) return 'profile'; // Check for profile page
+    if (path.includes('about')) return 'about'; // Check for About Us page
+    return 'home'; // Default to home
+  };
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
   };
 
   const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen); 
-    if (dropdownRef.current) {
-      const isDropdownVisible = dropdownRef.current.classList.contains('show');
-      if (isDropdownVisible) {
-        dropdownRef.current.classList.remove('show');
-      } else {
-        dropdownRef.current.classList.add('show');
-      }
-    }
+    setIsDropdownOpen(prev => !prev);
   };
-
-
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      dropdownRef.current.classList.remove('show');
       setIsDropdownOpen(false);
+      setIsUsernameClicked(false); // Reset when clicking outside
     }
-
     if (navbarRef.current && !navbarRef.current.contains(event.target) && isOpen) {
       setIsOpen(false);
     }
   };
 
-  // Fetch user information from the token
   useEffect(() => {
-    const token = sessionStorage.getItem("Token");
-
+    const token = localStorage.getItem("Token");
     if (token) {
       const tokenParts = token.split('.');
       if (tokenParts.length === 3) {
@@ -56,8 +56,6 @@ const Navbar = () => {
 
         setUserName(payload.user_name);
         setId(payload.user_id);
-        console.log('User Name:', payload.user_name);
-        console.log('User id:', payload.user_id);
       } else {
         navigate("/signin");
       }
@@ -72,83 +70,105 @@ const Navbar = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen]); 
+  }, [isOpen]);
 
-  const brandTextStyle = {
-    fontSize: '1.7rem',
-  };
-
-  const smallScreenStyle = {
-    fontSize: '1.0rem',
-  };
+  // Set active nav item based on current location
+  const activeNavItem = getActiveNavItem();
 
   return (
-    <>
-      <nav className={`navbar navbar-expand-lg bg-body-tertiary ${isOpen ? 'show' : ''}`} ref={navbarRef}>
-        <div className="container-fluid">
-          <span
-            className="navbar-brand"
-            style={window.innerWidth < 780 ? smallScreenStyle : brandTextStyle}
-          >
-            Library Management Systems
-          </span>
+    <nav className={`navbar navbar-expand-lg color ${isOpen ? 'show' : ''}`} ref={navbarRef}>
+      <div className="container-fluid">
+        <span className="navbar-brand pn">Library Management Systems</span>
 
-          <button
-            className="navbar-toggler"
-            type="button"
-            onClick={toggleNavbar}
-            aria-controls="navbarText"
-            aria-expanded={isOpen}
-            aria-label="Toggle navigation"
-            style={{ border: 'none', outline: 'none' }}
-          >
-            {isOpen ? (
-              <Icon icon="radix-icons:cross-2" />
-            ) : (
-              <Icon icon="mdi:menu" />
-            )}
-          </button>
+        <button
+          className="navbar-toggler"
+          type="button"
+          onClick={toggleNavbar}
+          aria-controls="navbarText"
+          aria-expanded={isOpen}
+          aria-label="Toggle navigation"
+        >
+          {isOpen ? (
+            <Icon icon="radix-icons:cross-2" />
+          ) : (
+            <Icon icon="mdi:menu" />
+          )}
+        </button>
 
-          <div className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`} id="navbarText">
-            <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-              <li className="nav-item me-5">
-                <Link className="nav-link text-dark" to="/library/book">Home</Link>
-              </li>
-              <li className="nav-item me-5">
-                <Link className="nav-link text-dark" to={`/library/purchase/${id}`}>Purchased</Link>
-              </li>
-              <li className="nav-item me-5">
-                <Link className="nav-link text-dark" to={`/library/return/${id}`}>Returned</Link>
-              </li>
-              <li className="nav-item dropdown me-5" ref={dropdownRef}>
-                <Link
-                  className="nav-link dropdown-toggle text-dark d-flex align-items-center"
-                  to="#"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded={false}
-                  onClick={toggleDropdown}
-                >
-                  {userName}
-                  
-                  <Icon
-                    icon={isDropdownOpen ? "mingcute:up-line" : "mingcute:down-line"}
-                    className="ms-2"
-                  />
-                </Link>
-                <ul className="dropdown-menu">
-                  <li><Link className="dropdown-item" to={`/library/profileupdate/${id}`}>Profile</Link></li>
-                  <li><Link className="dropdown-item" to="#">Another action</Link></li>
-                  <li><hr className="dropdown-divider" /></li>
-                  <li><Link className="dropdown-item" to="/signin">Logout</Link></li>
+        <div className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`} id="navbarText">
+          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li className="nav-item me-5">
+              <Link
+                className={`nav-link text-dark ${activeNavItem === 'home' ? 'active' : ''}`}
+                to={`/library/book/${id}`}
+              >
+                Home
+              </Link>
+            </li>
+            <li className="nav-item me-5">
+              <Link
+                className={`nav-link text-dark ${activeNavItem === 'purchased' ? 'active' : ''}`}
+                to={`/library/purchase/${id}`}
+              >
+                Purchased
+              </Link>
+            </li>
+            <li className="nav-item me-5">
+              <Link
+                className={`nav-link text-dark ${activeNavItem === 'returned' ? 'active' : ''}`}
+                to={`/library/return/${id}`}
+              >
+                Returned
+              </Link>
+            </li>
+            <li
+              className="nav-item dropdown me-5"
+              ref={dropdownRef}
+              onMouseEnter={() => { 
+                if (!isUsernameClicked) { 
+                  setIsDropdownOpen(true); 
+                } 
+              }} 
+              onMouseLeave={() => { 
+                if (!isUsernameClicked) { 
+                  setIsDropdownOpen(false); 
+                } 
+              }} 
+            >
+              <Link
+                className={`nav-link dropdown-toggle text-dark d-flex align-items-center ${isDropdownOpen ? 'show' : ''}`}  
+                to="#"
+                role="button"
+                aria-expanded={isDropdownOpen}
+                onClick={() => { 
+                  setIsUsernameClicked(true); 
+                  toggleDropdown(); 
+                }}
+              >
+                <span className={`username ${isDropdownOpen || isUsernameClicked || activeNavItem === 'profile' || activeNavItem === 'about' ? 'underline' : ''}`}>{userName}</span> 
+                <Icon icon={isDropdownOpen ? "mingcute:up-line" : "mingcute:down-line"} className="ms-2" />
+              </Link>
+
+              {isDropdownOpen && (
+                <ul className="dropdown-menu p-2 show bg-secondary">
+                  <li><Link className={`dropdown-item text-black`} to={`/library/profileupdate/${id}`} onClick={() => { 
+                    setIsUsernameClicked(true); // Keep underline when clicking profile
+                    toggleDropdown(); // Close dropdown after selecting
+                  }}>Profile</Link></li>
+                  <li><Link className={`dropdown-item text-black`} to={`/library/profileupdate/${id}`} onClick={() => { 
+                    setIsUsernameClicked(true); // Keep underline when clicking About Us
+                    toggleDropdown(); // Close dropdown after selecting
+                  }}>About Us</Link></li>
+                  <li><hr className="dropdown-divider bg-white" /></li>
+                  <li><Link className={`dropdown-item text-black`} to="/signin">Logout</Link></li>
                 </ul>
-              </li>
-              <div className='me-4'></div>
-            </ul>
-          </div>
+              )}
+            </li>
+            <div className='me-4'></div>
+          </ul>
         </div>
-      </nav>
-    </>
+      </div>
+    </nav>
   );
 };
 

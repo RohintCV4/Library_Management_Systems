@@ -61,7 +61,6 @@ export const libApi = createApi({
 
         getPurchase:build.query({
             query:(id)=>`event/borrowed/${id}`,
-            
             providesTags:['Library']
         }),
 
@@ -78,7 +77,7 @@ export const libApi = createApi({
                 url: `event/borrow/multiple/${id}`, // Use id in the URL
                 method: "POST",
                 body: { bookId: selectedBooks }, // Send selectedBooks as part of request body
-            }),
+            }), 
         }),
 
     })

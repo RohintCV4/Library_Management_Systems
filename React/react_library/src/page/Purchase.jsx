@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import {useParams } from 'react-router-dom';
-import {useGetPurchaseQuery } from '../redux/services/libApi';
-
+import { useParams } from 'react-router-dom';
+import { useGetPurchaseQuery } from '../redux/services/libApi';
+import '../asset/css/purchase.css'
 const Purchase = () => {
   const { id } = useParams();
   const { data: purchase, refetch } = useGetPurchaseQuery(id);
@@ -17,13 +17,18 @@ const Purchase = () => {
     }
   }, [purchase]);
 
+  if(purchase?.data?.length===0){
+    return("No data found");
+  }
+
   return (
-    <div className="container mt-5">
+
+    <div className="container mt-5 ">
       <div className="card border-0 shadow-sm rounded-4">
-        <div className="card-header bg-primary text-white">
+        <div className="card-header text-center bg-light">
           <h3 className="mb-0">Purchased Books</h3>
         </div>
-        <div className="card-body p-4 bg-light rounded-4">
+        <div className="card-body p-4 bg-light ">
           <div className="table-responsive">
             <table className="table table-hover">
               <thead className="table-dark">

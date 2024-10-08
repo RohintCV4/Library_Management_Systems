@@ -19,7 +19,7 @@ function App() {
         <Route path='/' element={<SignUp />}/>    
         <Route path='/signin' element={<SignIn />}/>
         <Route path='/library' element={<Layout />}>
-        <Route path='/library/book' element={<Book />}/>
+        <Route path='/library/book/:id' element={<Book />}/>
         <Route path='/library/profileupdate/:id' element={<ProfileUpdate />} />
         <Route path='/library/purchase/:id' element={<Purchase />}/>
         <Route path='/library/return/:id' element={<ReturnBook />}/>

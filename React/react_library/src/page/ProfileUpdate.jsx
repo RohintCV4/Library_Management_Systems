@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { signupSchema } from '../constant';
+import { updateSchema } from '../constant'; 
 import { useGetVisitorsQuery, useUpdateVisitorsMutation } from '../redux/services/libApi';
 
 const ProfileUpdate = () => {
@@ -12,36 +12,34 @@ const ProfileUpdate = () => {
   const navigate = useNavigate();
   
   const { data: userData, error, isLoading } = useGetVisitorsQuery(id);
-  console.log(userData);
-  
-  const [updateVisitors, { isSuccess }] = useUpdateVisitorsMutation(); 
+  const [updateVisitors] = useUpdateVisitorsMutation(); 
   
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
-    resolver: yupResolver(signupSchema),
+    resolver: yupResolver(updateSchema),
   });
 
-  
   useEffect(() => {
-    if (userData) {
+    if (userData?.data) {
       reset({
-        name: userData.name, 
-        address: userData.address,
-        phoneNumber: userData.phoneNumber, 
+        name: userData.data.name,
+        address: userData.data.address,
+        phoneNumber: userData.data.phoneNumber,
       });
     }
   }, [userData, reset]);
 
-  const onSubmit = async (data) => {
+  const dataSubmit = async (data) => {
     try {
       const updateData = {
         name: data.name,
         address: data.address,
-        phoneNumber: data.phoneNumber, 
+        phoneNumber: data.phoneNumber,
       };
-      
-      await updateVisitors({ id, data: updateData });
+
+      await updateVisitors({ id, data: updateData }).unwrap();
       toast.success('Profile updated successfully!');
-      // navigate('/profile'); 
+      reset(); 
+      navigate(`/library/book/${id}`); 
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error('Unable to update profile.');
@@ -49,169 +47,56 @@ const ProfileUpdate = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>; 
+    return <div className="text-center mt-5">Loading...</div>; 
   }
 
   if (error) {
-    return <div>Error loading user data.</div>; 
+    return <div className="text-center mt-5 text-danger">Error loading user data.</div>; 
   }
 
   return (
-    <div className="container">
+    <div className="container mt-5">
       <ToastContainer />
-      <h2>Update Profile</h2>
-      <form >
+      <h2 className="text-center mb-4">Update Profile</h2>
+      <form onSubmit={handleSubmit(dataSubmit)} className="shadow p-4 rounded bg-light">
+        
         <div className="mb-3">
-          <label htmlFor="name" className="form-label">Name</label>
+          <label htmlFor="name" className="form-label"><strong>Name</strong> </label>
           <input
             type="text"
             id="name"
-            name='name'
-            className="form-control"
-            {...register('name')} // Make sure the names match in register
+            className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+            {...register('name')}
           />
-          {errors.name && <p className="text-danger">{errors.name.message}</p>}
+          {errors.name && <div className="invalid-feedback">{errors.name.message}</div>}
         </div>
 
         <div className="mb-3">
-          <label htmlFor="address" className="form-label">Address</label>
+          <label htmlFor="address" className="form-label"><strong>Address</strong> </label>
           <input
             type="text"
             id="address"
-            name='address'
-            className="form-control"
-            {...register('address')} // Name should be consistent
+            className={`form-control ${errors.address ? 'is-invalid' : ''}`}
+            {...register('address')}
           />
-          {errors.address && <p className="text-danger">{errors.address.message}</p>}
+          {errors.address && <div className="invalid-feedback">{errors.address.message}</div>}
         </div>
 
         <div className="mb-3">
-          <label htmlFor="phone" className="form-label">Phone Number</label>
+          <label htmlFor="phoneNumber" className="form-label"><strong>Phone Number</strong> </label>
           <input
             type="text"
             id="phoneNumber"
-            name='phoneNumber'
-            className="form-control"
-            {...register('phoneNumber')} // Should match the 'phone' used in reset
+            className={`form-control ${errors.phoneNumber ? 'is-invalid' : ''}`}
+            {...register('phoneNumber')}
           />
-          {errors.phoneNumber && <p className="text-danger">{errors.phoneNumber.message}</p>}
+          {errors.phoneNumber && <div className="invalid-feedback">{errors.phoneNumber.message}</div>}
         </div>  
 
-        <button type="submit" className="btn btn-primary" onSubmit={handleSubmit(onSubmit)}>Update Profile</button>
+        <button type="submit" className="btn btn-primary w-100">Update Profile</button>
       </form>
     </div>
   );
 };
 
-
-// export default ProfileUpdate;
-
-
-
-//     const { id } = useParams(); 
-//    console.log(id);
-//   //  const [userData,setUserData]=useState([]);
-//     const { data: userData, error, isLoading } = useGetVisitorsQuery(id);
-//     console.log(userData,"F");
-    
-// // console.log('userData:', userData);  
-// // useEffect(() => {
-// //   const token = localStorage.getItem('Token'); // Replace 'yourTokenKey' with the key you used to store the token
-// //   const headers = { 'Authorization': `Bearer ${token}` }; // Set up the Authorization header
-
-// //   axios.get(`http://localhost:8005/api/v1/user/getid/${id}`, { headers })
-// //       .then(response => {
-// //          console.log(response,"vgggb");
-         
-// //           setUserData(response.data);
-// //       })
-// //       .catch(error => {
-// //           console.log(error);
-// //       });
-// // }, [id]);
-
-// console.log(userData);
-
-
-//     const [updateVisitors, { isSuccess }] = useUpdateVisitorsMutation(); 
-  
-//     const { register, handleSubmit, formState: { errors }, reset } = useForm({
-//         resolver: yupResolver(signupSchema)
-//     });
-
-//     useEffect(() => {
-//       if (userData) {
-//         reset({
-//         name: userData.name, 
-//         address: userData.address,
-//         phoneNumber: userData.phoneNumber
-//     })
-//       }
-//     }, [userData, reset]);
-//     console.log(userData);
-    
-//     const onSubmit = async (data) => {
-//       try {
-//         const updateData = {
-//           name: data.name,
-//           address: data.address,
-//           phone: data.phone
-//         };
-        
-//         await updateVisitors({ id: id, data: updateData }); 
-//         alert('Profile updated successfully!');
-//       } catch (error) {
-//         console.error("Error updating profile:", error);
-//         alert('Unable to update profile.');
-//       }
-//     };
-    
-  
-//     // if (isLoading) {
-//     //   return <div>Loading...</div>; 
-//     // }
-  
-//     // if (error) {
-//     //   return <div>Error loading user data.</div>; 
-//     // }
-  
-//     return (
-      // <div className="container">
-      //   <h2>Update Profile</h2>
-      //   <form onSubmit={handleSubmit(onSubmit)}>
-      //     <div className="mb-3">
-      //       <label htmlFor="name" className="form-label">Name</label>
-      //       <input
-      //         type="text"
-      //         id="name"
-      //         className="form-control"
-      //         {...register('name', { required: true })}
-      //       />
-      //     </div>
-  
-      //     <div className="mb-3">
-      //       <label htmlFor="address" className="form-label">Address</label>
-      //       <input
-      //         type="text"
-      //         id="address"
-      //         className="form-control"
-      //         {...register('address', { required: true })}
-      //       />
-      //     </div>
-  
-      //     <div className="mb-3">
-      //       <label htmlFor="phone" className="form-label">Phone Number</label>
-      //       <input
-      //         type="tel"
-      //         id="phone"
-      //         className="form-control"
-      //         {...register('phone', { required: true })}
-      //       />
-      //     </div>  
-      //     <button type="submit" className="btn btn-primary">Update Profile</button>
-      //   </form>
-      // </div>
-//     );
-//   };
-  
-  export default ProfileUpdate;
+export default ProfileUpdate;

@@ -100,7 +100,7 @@ public class AuthenticationService {
         }
 
         String jwt = jwtService.generateToken(user);
-        String refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
+        String refreshToken = jwtService.generateRefreshToken(user);
 
         JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
         jwtAuthenticationResponse.setToken(jwt);

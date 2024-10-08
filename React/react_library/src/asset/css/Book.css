@@ -1,0 +1,13 @@
+.card:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s;
+  }
+  .bg-green-light {
+    background-color: #e3ebbb; 
+  }
+  .gcolor{
+    background-color: rgb(101, 164, 143) !important;
+}
+.bod{
+    background-color: #f1f1f1;
+}

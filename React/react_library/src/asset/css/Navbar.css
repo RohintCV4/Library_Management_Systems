@@ -1,0 +1,57 @@
+.dropdown-toggle::after {
+    display: none !important;
+}
+.nav-link, .dropdown-toggle {
+    position: relative;
+    padding-bottom: 5px; /* Space for underline */
+}
+
+/* Underline for nav-link on hover and when active */
+.nav-link:hover::after,
+.nav-link.active::after,
+.dropdown-toggle:hover::after,
+.dropdown-toggle.show::after { 
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background-color: purple; 
+    z-index: 10;
+}
+
+/* Styling for the username with underline */
+.username {
+    position: relative;
+    text-decoration: none; /* Remove default underline */
+}
+
+/* Underline effect for username */
+.username.underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -4.5px; /* Adjust as needed */
+    height: 2px;
+    background-color: purple; 
+}
+
+/* Remove default dropdown arrow to avoid interference */
+.dropdown-toggle::after {
+    display: none;
+}
+
+.color{
+    background-color: rgb(130, 196, 174);
+}
+
+
+
+/* Additional mobile responsiveness */
+@media only screen and (max-width: 386px) {
+  .pn {
+    font-size: 16px;
+  }
+}

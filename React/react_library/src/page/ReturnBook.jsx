@@ -21,11 +21,14 @@ const ReturnBook = () => {
     returnData(bookId)
     // navigate(`library/return/${id}`);
   };
+  if(purchase?.data?.length===0){
+    return("No data found");
+  }
 
   return (
     <div className="container mt-5">
-      <div className="card border-0 shadow-sm rounded-4">
-        <div className="card-header bg-primary text-white">
+      <div className="card border-0 shadow-sm ">
+        <div className="card-header  text-center bg-light">
           <h3 className="mb-0">Return Books</h3>
         </div>
         <div className="card-body p-4 bg-light rounded-4">
