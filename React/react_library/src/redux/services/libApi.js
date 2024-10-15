@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const libApi = createApi({
     reducerPath:"libraryApi",
     baseQuery: fetchBaseQuery({
-        baseUrl:"http://localhost:8005/api/v1/",
+        baseUrl:"http://192.168.29.104:8005/api/v1/",
         prepareHeaders: (headers) => {
             const token = localStorage.getItem('Token');
             if (token) {
@@ -23,6 +23,8 @@ export const libApi = createApi({
             invalidatesTags:['Library']
         }),
 
+
+
         addLogin:build.mutation({
             query:(login)=>({
                 url:"auth/login",
@@ -32,6 +34,39 @@ export const libApi = createApi({
             invalidatesTags:['Library']
         }),
 
+        // addRatingBook: build.mutation({
+        //     query: ( rate ) => ({
+        //       url: "auth/rating-book",
+        //       method: "POST",
+        //       body: rate,
+        //     }),
+        //     invalidatesTags: ['Library'],
+        //   }),
+        addRatingBook: build.mutation({
+            query: ({ rating, id, bookId }) => ({
+              url: "auth/rating-book",
+              method: "POST",
+              body: {
+                rating,
+                userId: id,
+                bookId,
+              },
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`, // Retrieve token from localStorage (or other storage)
+              },
+            }),
+            invalidatesTags: ['Library'],
+          }),
+          
+          
+        getSearchBook:build.query({
+            query:(name)=>({
+                url:"auth/filter-book",
+                method:"GET",
+                body:name,
+                providesTags:['Library']
+            }),
+        }),
         getVisitors:build.query({
             query:(id) =>({
                 url:`user/ac/${id}`,
@@ -42,6 +77,15 @@ export const libApi = createApi({
             //     console.log(response,"hbh");
                 
             // },       
+        }),
+
+        updateBookRating:build.mutation({
+            query:(id)=>({
+                url:`auth/rating-update`,
+                method:"PUT",
+                body:id,
+            }),
+            invalidatesTags:['Library']
         }),
 
         updateVisitors:build.mutation({
@@ -82,4 +126,4 @@ export const libApi = createApi({
 
     })
 })
-export const {useAddSignupVisitorsMutation,useAddLoginMutation,useGetVisitorsQuery,useUpdateVisitorsMutation,useGetBooksQuery,useAddborrowbookMutation,useGetPurchaseQuery,useAddReturnBookMutation}=libApi;
+export const {useAddSignupVisitorsMutation,useAddLoginMutation,useGetVisitorsQuery,useUpdateVisitorsMutation,useGetBooksQuery,useAddborrowbookMutation,useGetPurchaseQuery,useAddReturnBookMutation,useUpdateBookRatingMutation,useAddRatingBookMutation,useGetSearchBookQuery}=libApi;

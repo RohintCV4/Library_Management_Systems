@@ -27,8 +27,10 @@ public class Book {
 
     private Long available;
 
+    private Float rating;
+
     @Lob
-    @Column(name = "imagedata", length = 2000)
+    @Column(length = 500000)
     private byte[] imageData;
 
     @ManyToOne

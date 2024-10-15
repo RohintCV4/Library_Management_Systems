@@ -30,6 +30,7 @@ public class BookController {
                                   @RequestParam("image") MultipartFile image,
                                   @RequestParam("available") Long available,
                                   @RequestParam("publisher") String publisher,
+                                  @RequestParam("rating") Float rating,
                                   @RequestParam("categoryId") String categoryId) throws IOException {
         Book book = new Book();
         book.setName(name);
@@ -38,7 +39,7 @@ public class BookController {
         book.setImageData(image.getBytes());
         book.setAvailable(available);
         book.setPublisher(publisher);
-
+        book.setRating(rating);
         Book savedBook = bookService.createBook(book, categoryId);
 
         return ResponseDTO.builder()
@@ -62,6 +63,11 @@ public class BookController {
                                      @RequestParam(required = false, defaultValue = "name") String sortField,
                                      @RequestParam(required = false, defaultValue = "asc") String sortDirection) {
         return bookService.searchBooks(search, page, size, sortField, sortDirection);
+    }
+
+    @PutMapping("/rating-update")
+    public ResponseDTO ratingUpdate(@RequestParam("id") String id){
+        return ResponseDTO.builder().data(this.bookService.ratingUpdate(id)).message("Rating Updated").statusCode(200).build();
     }
 
     @PutMapping("/update-book/{id}")

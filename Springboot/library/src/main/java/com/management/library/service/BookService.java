@@ -4,20 +4,22 @@ import com.management.library.dto.BookDTO;
 import com.management.library.dto.ResponseDTO;
 import com.management.library.entity.Book;
 import com.management.library.entity.Category;
+import com.management.library.entity.Rating;
 import com.management.library.repository.BookRepository;
 import com.management.library.repository.CategoryRepository;
+import com.management.library.repository.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.security.auth.login.AccountNotFoundException;
-import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class BookService {
@@ -27,14 +29,48 @@ public class BookService {
     @Autowired
     public CategoryRepository categoryRepository;
 
+    @Autowired
+    public RatingRepository ratingRepository;
+
     public Book createBook(Book book, String categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found"));
-        book.setCategory(category); // Set category in book
+        book.setCategory(category);
         return bookRepository.save(book);
     }
 
+    public Float ratingUpdate(String id) {
+//        System.err.println(id);
+        List<Rating> bookRatings = ratingRepository.findByBook_Id(id);
+        if (bookRatings.isEmpty()) {
+            System.err.println("No ratings found for this book.");
+            return 0.0f;
+        }
+        Book book = bookRepository.findById(id).orElseThrow();
+
+        AtomicInteger rateSum = new AtomicInteger();
+
+
+        bookRatings.forEach(data -> rateSum.addAndGet(data.getRating().intValue()));
+
+        Float averageRating = rateSum.get() / (float) bookRatings.size();
+
+//        DecimalFormat df = new DecimalFormat("#.00");
+//        String formattedAverage = df.format(averageRating);
+//
+//        System.err.println("Average Rating: " + formattedAverage);
+        book.setRating(averageRating);
+        this.bookRepository.save(book);
+        return averageRating;
+
+    }
+
+
+
+
     public List<Book> getBook() {
-        return this.bookRepository.findAllAvailableBook();
+//        List<Rating> bookRatings = ratingRepository.findByBook_Id(id);
+
+        return this.bookRepository.findAll();
     }
 
 

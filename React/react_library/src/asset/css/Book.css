@@ -1,4 +1,4 @@
-.card:hover {
+.cards:hover {
     transform: scale(1.05);
     transition: transform 0.2s;
   }
@@ -11,3 +11,10 @@
 .bod{
     background-color: #f1f1f1;
 }
+
+
+/* Hover effect for all buttons */
+
+
+/* Ensure non-active buttons revert to default when not hovered */
+
