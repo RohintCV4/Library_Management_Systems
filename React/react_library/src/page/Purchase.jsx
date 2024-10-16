@@ -59,17 +59,23 @@ try {
                   <th>Author Name</th>
                   <th>Publisher</th>
                   <th>Category</th>
+                  <th>Due Date</th>
                   <th>Rating</th>
                 </tr>
               </thead>
               <tbody>
                 {purchase?.data?.map((val, index) => (
+                
                   <tr key={index}>
+                    {console.log(val?.book?.overdue)
+                    }
                     <td>{index + 1}</td>
                     <td>{val?.book?.name}</td>
                     <td>{val?.book?.authorName}</td>
                     <td>{val?.book?.publisher}</td>
                     <td>{val?.book?.category?.name}</td>
+                    <td>{new Date(val?.overdue).toLocaleDateString('en-GB') }</td>
+                    
                     <td>
                       <Rating
                         name={`rating-${val.book.id}`}

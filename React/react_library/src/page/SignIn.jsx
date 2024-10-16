@@ -48,7 +48,10 @@ const SignIn = () => {
                 console.log('User ID:', payload.user_id);
 
                 // Navigate to the next page with user ID as a parameter
-                navigate(`/library/book/${payload.user_id}`);
+                setTimeout(() => {
+                    navigate(`/library/book/${payload.user_id}`);
+                }, 1501);
+                
             } else {
                 toast.error("Invalid token format.", { autoClose: 1500 });
             }

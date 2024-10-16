@@ -102,7 +102,7 @@ const Navbar = () => {
                 className={`nav-link text-dark ${activeNavItem === 'home' ? 'active' : ''}`}
                 to={`/library/book/${id}`}
               >
-                Home
+                Dashboard
               </Link>
             </li>
             <li className="nav-item me-5">
