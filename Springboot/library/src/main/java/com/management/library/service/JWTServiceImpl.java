@@ -1,7 +1,6 @@
 package com.management.library.service;
 
 import com.management.library.entity.User;
-import com.management.library.utils.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -9,11 +8,9 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
-import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -26,12 +23,12 @@ public class JWTServiceImpl {
         User user = (User) userDetails;
         String name = user.getName();
         String role = user.getRole();
-        String id=user.getId();
+        String id = user.getId();
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .claim("user_name", name)
                 .claim("role", role)
-                .claim("user_id",id)
+                .claim("user_id", id)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
                 .signWith(getSignKey())
@@ -42,12 +39,12 @@ public class JWTServiceImpl {
         User user = (User) userDetails;
         String name = user.getName();
         String role = user.getRole();
-        String id=user.getId();
+        String id = user.getId();
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .claim("user_name", name)
                 .claim("role", role)
-                .claim("user_id",id)
+                .claim("user_id", id)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
                 .signWith(getSignKey())

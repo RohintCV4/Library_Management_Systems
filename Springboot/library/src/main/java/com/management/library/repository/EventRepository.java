@@ -14,6 +14,7 @@ public interface EventRepository extends JpaRepository<Event, String> {
 
     @Query(value = "SELECT * FROM event WHERE book_id = ?1 AND user_id = ?2 AND is_returned = false", nativeQuery = true)
     Optional<Event> findByBookIdAndUserIdAndIsReturnedFalse(String bookId, String userId);
+
     List<Event> findByUserIdAndIsReturnedFalse(String userId);
 
 }

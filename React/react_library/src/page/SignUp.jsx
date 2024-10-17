@@ -40,10 +40,7 @@ const SignUp = () => {
         }
     };
 
-    // const handleCancel = () => {
-    //     reset();
-    //     toast.error("Values Cleared", { autoClose: 1500 });
-    // };
+
 
     return (
         <div className=' d-flex justify-content-center align-items-center  mt-5'>

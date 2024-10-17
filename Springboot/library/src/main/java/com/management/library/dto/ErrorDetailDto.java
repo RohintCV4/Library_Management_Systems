@@ -1,12 +1,12 @@
 package com.management.library.dto;
-import java.util.Date;
-
-import org.springframework.lang.Nullable;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
+
+import java.util.Date;
 
 @Data
 @Builder

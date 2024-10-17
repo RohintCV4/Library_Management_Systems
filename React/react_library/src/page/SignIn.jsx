@@ -17,7 +17,6 @@ const SignIn = () => {
 
     const [login] = useAddLoginMutation();
 
-    // Clear any existing tokens on component mount
     useEffect(() => {
         localStorage.removeItem('Token');
     }, []);
@@ -31,23 +30,20 @@ const SignIn = () => {
                 return;
             }
             
-            // Get the token and store it
             const token = result?.data?.token;
             localStorage.setItem('Token', token);
             toast.success("Login done Successfully", { autoClose: 500 });
             
-            // Decode the token to get user ID
             const tokenParts = token.split('.');
             if (tokenParts.length === 3) {
                 const payloadBase64 = tokenParts[1];
                 const decodedPayload = atob(payloadBase64);
                 const payload = JSON.parse(decodedPayload);
                 
-                // Set user ID
                 setId(payload.user_id);
                 console.log('User ID:', payload.user_id);
 
-                // Navigate to the next page with user ID as a parameter
+
                 setTimeout(() => {
                     navigate(`/library/book/${payload.user_id}`);
                 }, 1501);

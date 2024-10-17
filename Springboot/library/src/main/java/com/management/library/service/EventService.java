@@ -28,7 +28,7 @@ public class EventService {
     @Autowired
     public BookRepository bookRepository;
 
-    public final int max=3;
+    public final int max = 3;
 
     public List<Event> borrowMultipleBooks(String visitorsId, Set<String> bookIds) {
         Optional<User> visitorOpt = userRepository.findById(visitorsId);
@@ -36,7 +36,6 @@ public class EventService {
             throw new IllegalArgumentException("Invalid Visitor ID");
         }
 
-       
 
         User visitor = visitorOpt.get();
         List<Event> events = new ArrayList<>();
@@ -98,7 +97,7 @@ public class EventService {
         return this.eventRepository.save(event);
     }
 
-    public List<Event> getPurchased(String id){
+    public List<Event> getPurchased(String id) {
         return this.eventRepository.findByUserIdAndIsReturnedFalse(id);
 
     }

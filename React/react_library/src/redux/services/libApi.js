@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const libApi = createApi({
     reducerPath:"libraryApi",
     baseQuery: fetchBaseQuery({
-        baseUrl:"http://192.168.29.104:8005/api/v1/",
+        baseUrl:"http://localhost:8005/api/v1/",
         prepareHeaders: (headers) => {
             const token = localStorage.getItem('Token');
             if (token) {
@@ -11,6 +11,7 @@ export const libApi = createApi({
             }
             return headers;
         },
+
     }),
     tagTypes:['Library'],
     endpoints:(build) => ({
@@ -31,17 +32,10 @@ export const libApi = createApi({
                 method:"POST",
                 body:login,
             }),
-            invalidatesTags:['Library']
+            invalidatesTags:['Library'],
         }),
 
-        // addRatingBook: build.mutation({
-        //     query: ( rate ) => ({
-        //       url: "auth/rating-book",
-        //       method: "POST",
-        //       body: rate,
-        //     }),
-        //     invalidatesTags: ['Library'],
-        //   }),
+       
         addRatingBook: build.mutation({
             query: ({ rating, id, bookId }) => ({
               url: "auth/rating-book",
@@ -52,7 +46,7 @@ export const libApi = createApi({
                 bookId,
               },
               headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`, // Retrieve token from localStorage (or other storage)
+                Authorization: `Bearer ${localStorage.getItem('token')}`, 
               },
             }),
             invalidatesTags: ['Library'],
@@ -73,10 +67,7 @@ export const libApi = createApi({
                 method : "GET",
                 providesTags:['Library']
             }),
-            // transformResponse: (response) =>{
-            //     console.log(response,"hbh");
-                
-            // },       
+                 
         }),
 
         updateBookRating:build.mutation({
@@ -118,9 +109,9 @@ export const libApi = createApi({
 
         addborrowbook: build.mutation({
             query: ({ id, selectedBooks }) => ({
-                url: `event/borrow/multiple/${id}`, // Use id in the URL
+                url: `event/borrow/multiple/${id}`, 
                 method: "POST",
-                body: { bookId: selectedBooks }, // Send selectedBooks as part of request body
+                body: { bookId: selectedBooks }, 
             }), 
         }),
 

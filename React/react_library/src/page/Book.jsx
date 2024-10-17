@@ -198,7 +198,7 @@ const Book = () => {
                           <Button
                             className="btn text-white ms-auto px-3 gcolor"
                             onClick={(e) => {
-                              e.stopPropagation(); // Prevent modal from opening when clicking the button
+                              e.stopPropagation(); 
                               handleChange(item);
                             }}
                             disabled={bid.length >= 3 || bid.includes(item.id)}
@@ -221,7 +221,7 @@ const Book = () => {
                               <button type="button" className="btn-close" onClick={() => setModalVisible(false)} aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
-                              {/* Display additional information */}
+                             
                               <p><strong>Author:</strong> {modalData.authorName}</p>
                               <p><strong>Available:</strong> {modalData.available}</p>
                               <p><strong>Category:</strong> {modalData.categoryName}</p>
@@ -239,7 +239,6 @@ const Book = () => {
             })}
           </div>
 
-          {/* Submit Button */}
           <div className='row'>
             <span className='d-flex justify-content-end mt-4'>
               <Button
@@ -266,7 +265,7 @@ const Book = () => {
               </Button>
             </span>
 
-            {/* Pagination */}
+
             <span className='d-flex justify-content-center mt-4'>
               {Array.from({ length: state.totalPages }, (_, index) => index + 1).map((page) => (
                 <button
@@ -283,7 +282,6 @@ const Book = () => {
 
       </div>
 
-      {/* Styles for buttons */}
       <style>
         {`
       @media (min-width: 768px) {

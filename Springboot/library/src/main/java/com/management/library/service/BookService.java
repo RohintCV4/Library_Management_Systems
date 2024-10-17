@@ -16,10 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.AccountNotFoundException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class BookService {
@@ -39,36 +37,32 @@ public class BookService {
     }
 
     public Float ratingUpdate(String id) {
-//        System.err.println(id);
         List<Rating> bookRatings = ratingRepository.findByBook_Id(id);
+
         if (bookRatings.isEmpty()) {
             System.err.println("No ratings found for this book.");
             return 0.0f;
         }
+
         Book book = bookRepository.findById(id).orElseThrow();
 
-        AtomicInteger rateSum = new AtomicInteger();
+        int rateSum = 0;
 
+        for (Rating data : bookRatings) {
+            rateSum += data.getRating().intValue();
+        }
 
-        bookRatings.forEach(data -> rateSum.addAndGet(data.getRating().intValue()));
+        Float averageRating = rateSum / (float) bookRatings.size();
 
-        Float averageRating = rateSum.get() / (float) bookRatings.size();
-
-//        DecimalFormat df = new DecimalFormat("#.00");
-//        String formattedAverage = df.format(averageRating);
-//
-//        System.err.println("Average Rating: " + formattedAverage);
         book.setRating(averageRating);
-        this.bookRepository.save(book);
-        return averageRating;
 
+        this.bookRepository.save(book);
+
+        return averageRating;
     }
 
 
-
-
     public List<Book> getBook() {
-//        List<Rating> bookRatings = ratingRepository.findByBook_Id(id);
 
         return this.bookRepository.findAll();
     }
@@ -76,7 +70,7 @@ public class BookService {
 
     public List<BookDTO> searchBooks(String search, Integer page, Integer size, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
-        Pageable pageable = PageRequest.of(page != null ? page : 0, size != null ? size : 6, sort);
+        Pageable pageable = PageRequest.of(page != null ? page : 0, size != null ? size : 8, sort);
 
 
         Page<Book> bookPage = bookRepository.searchBooks(search, pageable);

@@ -7,17 +7,17 @@ import { Rating } from '@mui/material';
 const Purchase = () => {
   const { id } = useParams();
   const { data: purchase, refetch } = useGetPurchaseQuery(id);
-  const [addRatingBook] = useAddRatingBookMutation(); // Mutation hook
-  const [ratings, setRatings] = useState({}); // To store ratings for multiple books
+  const [addRatingBook] = useAddRatingBookMutation(); 
+  const [ratings, setRatings] = useState({}); 
 
-  // Refetch data when the component mounts or when id changes
+  
   useEffect(() => {
     refetch();
   }, [id, refetch]);
 
   useEffect(() => {
     if (purchase) {
-      console.log('Purchase data:', purchase); // Perform any side effects here
+      console.log('Purchase data:', purchase); 
     }
   }, [purchase]);
 
@@ -25,9 +25,9 @@ const Purchase = () => {
     return 'No data found';
   }
 
-  // Handle rating submission
+ 
   const handleRatingChange = async (newValue, bookId) => {
-    setRatings((prev) => ({ ...prev, [bookId]: newValue })); // Update rating state
+    setRatings((prev) => ({ ...prev, [bookId]: newValue })); 
     console.log(newValue);
 // console.log(localStorage.getItem('userId'));
 
