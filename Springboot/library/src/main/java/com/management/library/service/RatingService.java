@@ -28,21 +28,21 @@ public class RatingService {
 //        System.err.print(bookId);
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("Book Id not found"));
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User Id not found"));
-        Rating ratings=this.ratingRepository.findByBook_IdAndUser_Id(bookId,userId);
+        Rating ratings = this.ratingRepository.findByBook_IdAndUser_Id(bookId, userId);
 
-        // Create a new Rating instance
-        if(ratings==null) {
+
+        if (ratings == null) {
             Rating rate = Rating.builder()
                     .rating(ratingValue)
                     .book(book)
                     .user(user)
                     .build();
-            Rating rating=ratingRepository.save(rate);
+            Rating rating = ratingRepository.save(rate);
             bookService.ratingUpdate(book.getId());
             return rating;
         }
 //        Rating updateValue=ratingRepository.findByRating(id);
-        if(ratings!=null){
+        if (ratings != null) {
             ratings.setRating(ratingValue);
             ratingRepository.save(ratings);
             bookService.ratingUpdate(book.getId());

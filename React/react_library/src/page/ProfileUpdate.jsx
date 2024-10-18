@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { updateSchema } from '../constant'; 
 import { useGetVisitorsQuery, useUpdateVisitorsMutation } from '../redux/services/libApi';
+import { Button, Typography } from '@mui/material';
 
 const ProfileUpdate = () => {
   const { id } = useParams(); 
@@ -93,7 +94,9 @@ const ProfileUpdate = () => {
           {errors.phoneNumber && <div className="invalid-feedback">{errors.phoneNumber.message}</div>}
         </div>  
 
-        <button type="submit" className="btn btn-primary w-100">Update Profile</button>
+        <Button type="submit" variant="contained" className="btn-primary w-100">
+        <Typography textTransform={'capitalize'}> Update Profile</Typography>
+          </Button>
       </form>
     </div>
   );

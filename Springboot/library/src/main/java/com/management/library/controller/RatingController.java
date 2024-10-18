@@ -4,7 +4,10 @@ import com.management.library.dto.RatingDto;
 import com.management.library.dto.ResponseDTO;
 import com.management.library.entity.Rating;
 import com.management.library.service.RatingService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/v1/auth")

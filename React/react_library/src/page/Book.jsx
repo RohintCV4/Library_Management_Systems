@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useAddborrowbookMutation, useGetBooksQuery, useGetPurchaseQuery} from '../redux/services/libApi';
+import { useAddborrowbookMutation, useGetBooksQuery, useGetPurchaseQuery } from '../redux/services/libApi';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../asset/css/Book.css';
-import { Box, Rating } from '@mui/material';
+import { Box, Button, Rating, Typography } from '@mui/material';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Stack } from 'react-bootstrap';
 
@@ -13,7 +13,7 @@ const Book = () => {
   const [state, setState] = useState({
     bookValue: [],
     selectedBooks: [],
-    currentPage: 1, 
+    currentPage: 1,
     totalPages: 0,
     get: []
   });
@@ -23,21 +23,22 @@ const Book = () => {
   const [modalData, setModalData] = useState({});
   const modalRef = useRef();
   const handleSearchChange = (event) => {
-    
+
     setSearchTerm(event.target.value);
-    
+
   };
   const filteredBooks = state.bookValue.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  // console.log(state?.bookValue);
   
+
 
   const { data: book, isLoading, error, refetch } = useGetBooksQuery();
   const { data: purchase } = useGetPurchaseQuery(id);
   const navigate = useNavigate();
-  
+
   const [addBorrowBook] = useAddborrowbookMutation();
- 
 
 
   useEffect(() => {
@@ -46,15 +47,6 @@ const Book = () => {
 
   const bid = purchase?.data?.map(item => item.book.id) || [];
   const allowedToTake = 3 - bid.length;
-
-  useEffect(() => {
-    const token = localStorage.getItem("Token");
-    if (token) {
-      const payloadBase64 = token.split('.')[1];
-      const payload = JSON.parse(atob(payloadBase64));
-      setState(prevState => ({ ...prevState, id: payload.user_id }));
-    }
-  }, []);
 
   useEffect(() => {
     if (book && book.data) {
@@ -73,8 +65,11 @@ const Book = () => {
       setState(prevState => ({
         ...prevState,
         get: prevState.get.filter(book => book.id !== item.id),
+
         selectedBooks: prevState.selectedBooks.filter(bookId => bookId !== item.id)
       }));
+      
+      
       toast.info("You have returned the book.", {
         position: "top-right",
         autoClose: 1500,
@@ -95,6 +90,8 @@ const Book = () => {
         get: [...prevState.get, { id: item.id, value: item }],
         selectedBooks: [...prevState.selectedBooks, item.id]
       }));
+// console.log(state?.selectedBooks);
+
 
       if (state.get.length + 1 === allowedToTake) {
         toast.info(`You taken maximum books.`, {
@@ -158,7 +155,7 @@ const Book = () => {
           </div>
 
           <div className="row">
-          {filteredBooks.slice((state.currentPage - 1) * 8, state.currentPage * 8).map((item) => {
+            {filteredBooks.slice((state.currentPage - 1) * 8, state.currentPage * 8).map((item) => {
               if (item?.available !== 0) {
                 const mimeType = item.imageFormat === 'png' ? 'image/png' :
                   item.imageFormat === 'jpeg' || item.imageFormat === 'jpg' ? 'image/jpeg' :
@@ -167,7 +164,7 @@ const Book = () => {
                         'application/octet-stream';
 
                 const isTaken = state.get.some(book => book.id === item.id);
-                
+
                 return (
                   <div className="col-md-6 col-lg-3 mb-4" key={item.id}>
                     <div className={`card cards h-100 shadow-sm p-2 ${isTaken ? 'bg-green-light text-dark' : 'bg-light'} border-0`}
@@ -178,9 +175,9 @@ const Book = () => {
                           available: item.available,
                           categoryName: item.category?.name,
                           publisher: item.publisher,
-                          rating:item.rating
+                          rating: item.rating
                         });
-                        setModalVisible(true); 
+                        setModalVisible(true);
                       }}>
                       <img
                         src={`data:${mimeType};base64,${item.imageData}`}
@@ -196,18 +193,20 @@ const Book = () => {
 
                         <div className="mt-auto d-flex">
                           <Stack spacing={1}>
-                          <Rating name="half-rating-read" disabled value={item.rating}/>
-                          </Stack>  
-                          <button
-                            className="btn text-white ms-auto px-4 gcolor"
+                            <Rating name="half-rating-read" disabled value={item.rating} />
+                          </Stack>
+                          <Button
+                            className="btn text-white ms-auto px-3 gcolor"
                             onClick={(e) => {
-                              e.stopPropagation(); // Prevent modal from opening when clicking the button
+                              e.stopPropagation(); 
                               handleChange(item);
                             }}
-                            disabled={bid.length >= allowedToTake || bid.includes(item.id)}
+                            disabled={bid.length >= 3 || bid.includes(item.id)}
                           >
-                            {isTaken ? "Return" : "Get"}
-                          </button>
+                            <Typography textTransform={'capitalize'}> {isTaken ? "Return" : "Get"}</Typography>
+
+                            
+                          </Button>
                         </div>
                       </div>
                     </div>
@@ -222,7 +221,7 @@ const Book = () => {
                               <button type="button" className="btn-close" onClick={() => setModalVisible(false)} aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
-                              {/* Display additional information */}
+                             
                               <p><strong>Author:</strong> {modalData.authorName}</p>
                               <p><strong>Available:</strong> {modalData.available}</p>
                               <p><strong>Category:</strong> {modalData.categoryName}</p>
@@ -240,11 +239,10 @@ const Book = () => {
             })}
           </div>
 
-          {/* Submit Button */}
           <div className='row'>
             <span className='d-flex justify-content-end mt-4'>
-              <button
-                className='btn btn-success btn-lg'
+              <Button
+                variant="contained" color="success"
                 onClick={async () => {
                   if (state.selectedBooks.length === 0) {
                     toast.error("You can't select any books; you already reached the maximum limit.", { autoClose: 2000 });
@@ -264,10 +262,10 @@ const Book = () => {
                 disabled={state.selectedBooks.length > allowedToTake}
               >
                 Submit
-              </button>
+              </Button>
             </span>
 
-            {/* Pagination */}
+
             <span className='d-flex justify-content-center mt-4'>
               {Array.from({ length: state.totalPages }, (_, index) => index + 1).map((page) => (
                 <button
@@ -284,7 +282,6 @@ const Book = () => {
 
       </div>
 
-      {/* Styles for buttons */}
       <style>
         {`
       @media (min-width: 768px) {
@@ -321,7 +318,7 @@ const Book = () => {
       </style>
 
     </div>
-    
+
   );
 };
 

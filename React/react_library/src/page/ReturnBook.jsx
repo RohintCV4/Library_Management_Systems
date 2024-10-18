@@ -1,15 +1,8 @@
-// import React from 'react'
-
-// const ReturnBook = () => {
-//   return (
-//     <div>ReturnBook</div>
-//   )
-// }
-
-// export default ReturnBook
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAddReturnBookMutation, useGetPurchaseQuery } from '../redux/services/libApi';
+import { Button, createTheme, ThemeProvider, Typography } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
 
 const ReturnBook = () => {
   const { id } = useParams();
@@ -24,8 +17,19 @@ const ReturnBook = () => {
   if(purchase?.data?.length===0){
     return("No data found");
   }
+  const theme = createTheme({
+    palette: {
+      ochre: {
+        main: '#E3D026',
+        light: '#E9DB5D',
+        dark: '#A29415',
+        contrastText: '#242105',
+      },
+    },
+  });
 
   return (
+    <ThemeProvider theme={theme}>
     <div className="container mt-5">
       <div className="card border-0 shadow-sm ">
         <div className="card-header  text-center bg-light">
@@ -54,13 +58,13 @@ const ReturnBook = () => {
                    <td>{val?.book?.category?.name}</td> 
                    {console.log(val.id)}
                     <td>
-                      <button
-                        className="btn btn-warning btn-sm"
+                      <Button
+                        variant="contained" color="ochre" endIcon={<SendIcon />}
                         onClick={() => handleReturn(val?.id)}
                         // onClick={() => navigate(`library/return/${val?.id}`)} 
                       >
-                        Return
-                      </button>
+                     <Typography textTransform={'capitalize'}> Return</Typography>
+                      </Button>
                     </td>
                   </tr>
                 ))}
@@ -70,6 +74,7 @@ const ReturnBook = () => {
         </div>
       </div>
     </div>
+    </ThemeProvider>
   );
 };
 

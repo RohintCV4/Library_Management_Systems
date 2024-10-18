@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/event")
@@ -36,7 +35,6 @@ public class EventController {
     }
 
 
-
     // Endpoint to return a book
     @PostMapping("/return/{eventId}")
     public ResponseDTO returnBook(@PathVariable String eventId) {
@@ -59,6 +57,7 @@ public class EventController {
                     .build();
         }
     }
+
     @GetMapping("/borrowed/{id}")
     public ResponseDTO getBorrowedBooks(@PathVariable String id) {
         List<Event> events = eventService.getPurchased(id);

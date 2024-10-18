@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BookRepository extends JpaRepository<Book,String> {
+public interface BookRepository extends JpaRepository<Book, String> {
 //    List<Book> findByCategoryId(Long CategoryId);
 //    boolean existsByEmail(String email);
 

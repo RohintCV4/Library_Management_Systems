@@ -15,7 +15,7 @@ public class UserController {
     public UserServiceImpl userService;
 
     @GetMapping("/get-all")
-    public ResponseDTO getUser(){
+    public ResponseDTO getUser() {
         return ResponseDTO.builder().data(this.userService.getUser()).message("User Retrieved Successfully").statusCode(200).build();
     }
 
@@ -27,11 +27,11 @@ public class UserController {
 
     @PutMapping("/update-user/{id}")
     public ResponseDTO updateUser(@PathVariable String id, @RequestBody User user) throws AccountNotFoundException {
-        return ResponseDTO.builder().data(this.userService.updateUser(id,user)).message("Updated Successfully").statusCode(200).build();
+        return ResponseDTO.builder().data(this.userService.updateUser(id, user)).message("Updated Successfully").statusCode(200).build();
     }
 
     @DeleteMapping("/delete-user/{id}")
     public ResponseDTO deleteUser(@PathVariable String id) throws AccountNotFoundException {
-        return  ResponseDTO.builder().data(this.userService.deleteUser(id)).message("Id deleted Successfully").statusCode(200).build();
+        return ResponseDTO.builder().data(this.userService.deleteUser(id)).message("Id deleted Successfully").statusCode(200).build();
     }
 }

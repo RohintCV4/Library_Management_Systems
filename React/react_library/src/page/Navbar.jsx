@@ -10,21 +10,21 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userName, setUserName] = useState('');
   const [id, setId] = useState('');
-  const [isUsernameClicked, setIsUsernameClicked] = useState(false); // Track if username is clicked
+  const [isUsernameClicked, setIsUsernameClicked] = useState(false); 
 
   const dropdownRef = useRef(null);
   const navbarRef = useRef(null);
   const navigate = useNavigate();
-  const location = useLocation(); // Get current location
+  const location = useLocation(); 
 
-  // Determine active nav item based on current path
+
   const getActiveNavItem = () => {
     const path = location.pathname;
     if (path.includes('purchase')) return 'purchased';
     if (path.includes('return')) return 'returned';
-    if (path.includes('profileupdate')) return 'profile'; // Check for profile page
-    if (path.includes('about')) return 'about'; // Check for About Us page
-    return 'home'; // Default to home
+    if (path.includes('profileupdate')) return 'profile'; 
+    if (path.includes('about')) return 'about'; 
+    return 'home'; 
   };
 
   const toggleNavbar = () => {
@@ -38,7 +38,7 @@ const Navbar = () => {
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsDropdownOpen(false);
-      setIsUsernameClicked(false); // Reset when clicking outside
+      setIsUsernameClicked(false); 
     }
     if (navbarRef.current && !navbarRef.current.contains(event.target) && isOpen) {
       setIsOpen(false);
@@ -72,7 +72,7 @@ const Navbar = () => {
     };
   }, [isOpen]);
 
-  // Set active nav item based on current location
+
   const activeNavItem = getActiveNavItem();
 
   return (
@@ -102,7 +102,7 @@ const Navbar = () => {
                 className={`nav-link text-dark ${activeNavItem === 'home' ? 'active' : ''}`}
                 to={`/library/book/${id}`}
               >
-                Home
+                Dashboard
               </Link>
             </li>
             <li className="nav-item me-5">
@@ -152,12 +152,12 @@ const Navbar = () => {
               {isDropdownOpen && (
                 <ul className="dropdown-menu p-2 show bg-secondary">
                   <li><Link className={`dropdown-item text-black`} to={`/library/profileupdate/${id}`} onClick={() => { 
-                    setIsUsernameClicked(true); // Keep underline when clicking profile
-                    toggleDropdown(); // Close dropdown after selecting
+                    setIsUsernameClicked(true); 
+                    toggleDropdown(); 
                   }}>Profile</Link></li>
                   <li><Link className={`dropdown-item text-black`} to={`/library/profileupdate/${id}`} onClick={() => { 
-                    setIsUsernameClicked(true); // Keep underline when clicking About Us
-                    toggleDropdown(); // Close dropdown after selecting
+                    setIsUsernameClicked(true);
+                    toggleDropdown(); 
                   }}>About Us</Link></li>
                   <li><hr className="dropdown-divider bg-white" /></li>
                   <li><Link className={`dropdown-item text-black`} to="/signin">Logout</Link></li>

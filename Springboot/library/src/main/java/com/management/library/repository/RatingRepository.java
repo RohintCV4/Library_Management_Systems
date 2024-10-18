@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RatingRepository extends JpaRepository<Rating,String> {
+public interface RatingRepository extends JpaRepository<Rating, String> {
 
     List<Rating> findByBook_Id(String id);
 
