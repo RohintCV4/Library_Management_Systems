@@ -1,19 +1,20 @@
 package com.management.library.service;
 
 import com.management.library.dto.ResponseDTO;
+import com.management.library.dto.VisitorReturnBookDto;
 import com.management.library.entity.User;
 import com.management.library.exception.BadRequestServiceAlertException;
+import com.management.library.repository.EventRepository;
 import com.management.library.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.security.auth.login.AccountNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -21,6 +22,12 @@ public class UserServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EventRepository eventRepository;
+
+    @Autowired
+    private EventService eventService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws BadRequestServiceAlertException {
@@ -31,11 +38,11 @@ public class UserServiceImpl implements UserDetailsService {
         return this.userRepository.save(user);
     }
 
-    public List<User> getUser() {
-        return this.userRepository.findAll();
+    public List<User> getallVisitorUser() {
+        return this.userRepository.findByRole("ROLE_VISITOR");
     }
 
-    public Optional<User> getId(@PathVariable String id) throws AccountNotFoundException {
+    public Optional<User> getId(String id) throws AccountNotFoundException {
         boolean exists = this.userRepository.existsById(id);
         if (exists) {
             return this.userRepository.findById(id);
@@ -44,8 +51,30 @@ public class UserServiceImpl implements UserDetailsService {
         }
     }
 
+//    public List<VisitorReturnBookDto> getAllUserReturnBook() {
+//        List<User> users = userRepository.findAll();
 
-    public User updateUser(@PathVariable String id, @RequestBody User user) throws AccountNotFoundException {
+//            return users.stream().filter(user -> user.getRole().contains("ROLE_VISITOR")).map(user -> {
+//                VisitorReturnBookDto dto = new VisitorReturnBookDto();
+//                dto.setName(user.getName());
+//                dto.setEmail(user.getEmail());
+//                dto.setPhoneNumber(user.getPhoneNumber());
+//                dto.setCreatedAt(user.getCreatedAt().toString());
+//                dto.setAddress(user.getAddress());
+//
+//
+//                Integer bookCount = eventRepository.countNotReturnedBooksByUserId(user.getId());
+////                Integer bookCount= eventService.getNotReturn(user.getId());
+//                dto.setBookCount(bookCount != null ? String.valueOf(bookCount) : "0");
+//
+//
+//                return dto;
+//            }).collect(Collectors.toList());
+//    return null;
+//    }
+
+
+    public User updateUser(String id, User user) throws AccountNotFoundException {
         System.err.println(user);
 
         return userRepository.findById(id)

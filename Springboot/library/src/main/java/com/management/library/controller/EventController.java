@@ -2,12 +2,15 @@ package com.management.library.controller;
 
 import com.management.library.dto.BorrowBooksRequestDTO;
 import com.management.library.dto.ResponseDTO;
+import com.management.library.dto.VisitorReturnBookDto;
 import com.management.library.entity.Event;
+import com.management.library.entity.User;
 import com.management.library.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/event")
@@ -67,4 +70,11 @@ public class EventController {
                 .statusCode(200)
                 .build();
     }
+
+    @GetMapping("/list/user")
+    public ResponseDTO getUserReturnBook(){
+        return ResponseDTO.builder().data(this.eventService.getUserReturnBook()).message("Retrieved Successfully").statusCode(200).build();
+    }
+
+
 }

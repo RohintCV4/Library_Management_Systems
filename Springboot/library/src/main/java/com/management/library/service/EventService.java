@@ -1,5 +1,6 @@
 package com.management.library.service;
 
+import com.management.library.dto.VisitorReturnBookDto;
 import com.management.library.entity.Book;
 import com.management.library.entity.Event;
 import com.management.library.entity.User;
@@ -11,10 +12,7 @@ import com.management.library.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class EventService {
@@ -99,6 +97,28 @@ public class EventService {
 
     public List<Event> getPurchased(String id) {
         return this.eventRepository.findByUserIdAndIsReturnedFalse(id);
+    }
+//
 
+
+    public List<VisitorReturnBookDto> getUserReturnBook() {
+        List<Object[]> result = eventRepository.findUserWithEventCount();
+
+        List<VisitorReturnBookDto> visitorReturnBookDtos=new ArrayList<>();
+        for (Object[] obj : result) {
+            User user = (User) obj[0];
+            Long count = (Long) obj[1];
+            visitorReturnBookDtos.add(VisitorReturnBookDto.builder()
+                    .email(user.getEmail())
+                    .name(user.getName())
+                    .address(user.getAddress())
+                    .createdAt(String.valueOf(user.getCreatedAt()))
+                    .BookCount(count.toString())
+                    .phoneNumber((user.getPhoneNumber()))
+                    .build());
+
+        }
+
+        return visitorReturnBookDtos;
     }
 }

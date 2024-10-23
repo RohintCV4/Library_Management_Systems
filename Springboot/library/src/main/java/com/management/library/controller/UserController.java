@@ -14,12 +14,14 @@ public class UserController {
     @Autowired
     public UserServiceImpl userService;
 
-    @GetMapping("/get-all")
-    public ResponseDTO getUser() {
-        return ResponseDTO.builder().data(this.userService.getUser()).message("User Retrieved Successfully").statusCode(200).build();
+    @GetMapping("/get-data")
+    public ResponseDTO getallVisitorUser() {
+        return ResponseDTO.builder().data(this.userService.getallVisitorUser()).message("User Retrieved Successfully").statusCode(200).build();
     }
 
-    @GetMapping("/ac/{id}")
+
+
+    @GetMapping("/account/{id}")
     public ResponseDTO getId(@PathVariable String id) throws AccountNotFoundException {
         System.out.print(this.userService.getId(id));
         return ResponseDTO.builder().data(this.userService.getId(id)).message("User Id Retrieved Successfully").statusCode(200).build();
@@ -34,4 +36,9 @@ public class UserController {
     public ResponseDTO deleteUser(@PathVariable String id) throws AccountNotFoundException {
         return ResponseDTO.builder().data(this.userService.deleteUser(id)).message("Id deleted Successfully").statusCode(200).build();
     }
+
+//    @GetMapping("/all/list/event")
+//    public ResponseDTO getUserReturnBook(){
+//        return ResponseDTO.builder().data(this.userService.getAllUserReturnBook()).message("UserList Retrieved Successfully").statusCode(200).build();
+//    }
 }

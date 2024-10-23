@@ -11,10 +11,9 @@ public class WebCorsConfig {
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
-            @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/auth/**").allowedOrigins("http://localhost:3000", "http://localhost:2024");
-                registry.addMapping("/api/**").allowedOrigins("http://localhost:3000", "http://localhost:2024");
+                registry.addMapping("/**").allowedOrigins("http://localhost:3000", "http://192.168.0.152:3000");
+                registry.addMapping("/api/**").allowedOrigins("http://localhost:3000", "http://192.168.0.152:2024");
             }
         };
     }

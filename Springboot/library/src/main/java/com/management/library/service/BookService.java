@@ -80,8 +80,6 @@ public class BookService {
             dto.setPublisher(book.getPublisher());
             dto.setName(book.getName());
             dto.setAuthorName(book.getAuthorName());
-
-
             BookDTOs.add(dto);
         }
         return BookDTOs;

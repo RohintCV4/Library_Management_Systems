@@ -53,7 +53,7 @@ public class BookController {
     @GetMapping("/filter-book")
     public List<BookDTO> searchBook(@RequestParam(required = false) String search,
                                     @RequestParam(required = false) Integer page,
-                                    @RequestParam(required = false) Integer size,
+                                    @RequestParam(defaultValue = "8") Integer size,
                                     @RequestParam(required = false, defaultValue = "name") String sortField,
                                     @RequestParam(required = false, defaultValue = "asc") String sortDirection) {
         return bookService.searchBooks(search, page, size, sortField, sortDirection);
