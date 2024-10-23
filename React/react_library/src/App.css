@@ -36,3 +36,32 @@
     transform: rotate(360deg);
   }
 }
+.image{
+  background-image: url(../src/asset/Designer1.jpeg);
+  object-fit: cover;
+  height: 100vh;
+}
+.image1{
+  background-image: url(../src/asset/Designer1.jpeg);
+  object-fit: cover;
+  height: 100vh;
+}
+@media (max-width: 768px) {
+  .image {
+    background-image: url(../src/asset/Designer1.jpeg); 
+    height: 100vh; 
+  }
+}
+
+@media (max-width: 425px) {
+  .image {
+    background-image: url(../src/asset/Designer1.jpeg); 
+    height: 140vh; 
+  }
+}
+@media (max-width: 320px) {
+  .image {
+    background-image: url(../src/asset/Designer1.jpeg); 
+    height: 150vh; 
+  }
+}

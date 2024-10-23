@@ -53,21 +53,35 @@ export const libApi = createApi({
           }),
           
           
-        getSearchBook:build.query({
-            query:(name)=>({
-                url:"auth/filter-book",
-                method:"GET",
-                body:name,
-                providesTags:['Library']
-            }),
-        }),
+        // getSearchBook:build.query({
+        //     query:(name)=>({
+        //         url:`auth/filter-book?search=${name}`,
+        //         method:"GET",
+        //         body:name,
+        //         providesTags:['Library']
+        //     }),
+        // }),
+        getsearchPracticeTest: build.query({
+            query: ({search,searchCurrentPageNo}) => `/api/v1/search-practice-test?pageNo=${searchCurrentPageNo}${search.length===0?"":`&search=${search}`}`,
+          }),
+
         getVisitors:build.query({
             query:(id) =>({
-                url:`user/ac/${id}`,
+                url:`user/account/${id}`,
                 method : "GET",
                 providesTags:['Library']
             }),
                  
+        }),
+
+        getallvisitors:build.query({
+            query:()=>"user/get-data",
+            providesTags:['Library']
+        }),
+
+        getVisitorEventList:build.query({
+            query:()=>"event/list/user",
+            providesTags:['Library']
         }),
 
         updateBookRating:build.mutation({
@@ -109,7 +123,8 @@ export const libApi = createApi({
 
         addborrowbook: build.mutation({
             query: ({ id, selectedBooks }) => ({
-                url: `event/borrow/multiple/${id}`, 
+                url: `event/borrow/multiple/${id}`,     
+                // url:"https://v1nrolapi.devboxengine.com/v1/api/login",
                 method: "POST",
                 body: { bookId: selectedBooks }, 
             }), 
@@ -117,4 +132,4 @@ export const libApi = createApi({
 
     })
 })
-export const {useAddSignupVisitorsMutation,useAddLoginMutation,useGetVisitorsQuery,useUpdateVisitorsMutation,useGetBooksQuery,useAddborrowbookMutation,useGetPurchaseQuery,useAddReturnBookMutation,useUpdateBookRatingMutation,useAddRatingBookMutation,useGetSearchBookQuery}=libApi;
+export const {useAddSignupVisitorsMutation,useAddLoginMutation,useGetVisitorsQuery,useUpdateVisitorsMutation,useGetBooksQuery,useAddborrowbookMutation,useGetPurchaseQuery,useAddReturnBookMutation,useUpdateBookRatingMutation,useAddRatingBookMutation,useGetsearchPracticeTestQuery,useGetallvisitorsQuery,useGetVisitorEventListQuery}=libApi;

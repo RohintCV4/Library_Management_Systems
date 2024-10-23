@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useAddborrowbookMutation, useGetBooksQuery, useGetPurchaseQuery } from '../redux/services/libApi';
+import { useAddborrowbookMutation, useGetBooksQuery, useGetPurchaseQuery, useGetsearchPracticeTestQuery,  } from '../redux/services/libApi';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../asset/css/Book.css';
 import { Box, Button, Rating, Typography } from '@mui/material';
@@ -22,14 +22,7 @@ const Book = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalData, setModalData] = useState({});
   const modalRef = useRef();
-  const handleSearchChange = (event) => {
-
-    setSearchTerm(event.target.value);
-
-  };
-  const filteredBooks = state.bookValue.filter(item =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+ 
   // console.log(state?.bookValue);
   
 
@@ -40,13 +33,21 @@ const Book = () => {
 
   const [addBorrowBook] = useAddborrowbookMutation();
 
-
+  const SearchTestData = (search,searchCurrentPageNo) => {
+    const {
+      data: searchTest,
+      error,
+      isLoading,
+    } = useGetsearchPracticeTestQuery({search,searchCurrentPageNo});
+    return { searchTest, error, isLoading };
+  };
   useEffect(() => {
     refetch();
   }, [id, refetch]);
 
   const bid = purchase?.data?.map(item => item.book.id) || [];
   const allowedToTake = 3 - bid.length;
+ 
 
   useEffect(() => {
     if (book && book.data) {
@@ -57,7 +58,16 @@ const Book = () => {
       }));
     }
   }, [book]);
+  const handleSearchChange = (event) => {
 
+    setSearchTerm(event.target.value);
+    
+
+  };
+  const filteredBooks = state?.bookValue?.filter(item =>
+    item?.name?.toLowerCase()?.includes(searchTerm?.toLowerCase())
+  );
+  // const filteredBooks = srch?.data || [];
   const handleChange = (item) => {
     const isBookAlreadyTaken = state.get.some(book => book.id === item.id);
 
@@ -144,7 +154,7 @@ const Book = () => {
                   className="border-0 flex-grow-1 w-100"
                   placeholder="Search"
                   value={searchTerm}
-                  onChange={handleSearchChange}
+                  onChange={SearchTestData}
                   style={{
                     height: "100%",
                     outline: "none",

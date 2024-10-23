@@ -13,41 +13,53 @@ const SignIn = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(signInSchema)
     });
-    const [id, setId] = useState('');
-
+    
     const [login] = useAddLoginMutation();
 
     useEffect(() => {
         localStorage.removeItem('Token');
     }, []);
-    
-    
+
     const onSubmit = async (data) => {
         try {
             const result = await login(data);
+            
             if (result.error) {
                 toast.error("Email or password is incorrect. Please try again.", { autoClose: 1500 });
                 return;
             }
-            
+
             const token = result?.data?.token;
+            if (!token) {
+                toast.error("No token received. Please try again.", { autoClose: 1500 });
+                return;
+            }
+
             localStorage.setItem('Token', token);
             toast.success("Login done Successfully", { autoClose: 500 });
-            
+
             const tokenParts = token.split('.');
             if (tokenParts.length === 3) {
                 const payloadBase64 = tokenParts[1];
                 const decodedPayload = atob(payloadBase64);
                 const payload = JSON.parse(decodedPayload);
-                
-                setId(payload.user_id);
-                console.log('User ID:', payload.user_id);
 
+                const userId = payload.user_id;
+                const userRole = payload.role;
 
-                setTimeout(() => {
-                    navigate(`/library/book/${payload.user_id}`);
-                }, 1501);
-                
+                console.log('User ID:', userId);
+                console.log('User Role:', userRole);
+
+                // Navigate based on user role
+                if (userRole === "ROLE_VISITOR") {
+                    setTimeout(() => {
+                        navigate(`/library/book/${userId}`);
+                    }, 1501);
+                } else {
+                    setTimeout(() => {
+                        navigate(`/userlist`);
+                    }, 1501);
+                }
             } else {
                 toast.error("Invalid token format.", { autoClose: 1500 });
             }
@@ -65,29 +77,31 @@ const SignIn = () => {
     };
 
     return (
-        <div className='d-flex justify-content-center align-items-center mt-5'>
-            <ToastContainer />
-            <div className='card border-0 shadow-lg bg-light card mx-auto col-md-8 col-lg-5 col-xl-5'>
-                <div className='card-body mt-3 p-xl-4 p-lg-4'>
-                    <h3 className='text-center'>Library Management Systems</h3>
-                    <div className='mb-5'></div>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        {signInfields.map((field, index) => (
-                            <FormField
-                                key={index}
-                                field={field}
-                                register={register}
-                                errors={errors}
-                            />
-                        ))}
-                        <button className="btn btn-secondary col-12 mt-3 rounded-1" type="submit">
-                            Sign In
-                        </button>
-                    </form>
+        <div className='image1'> 
+            <div className='d-flex justify-content-center align-items-center p-3 p-sm-5 p-md-4 p-lg-5'>
+                <ToastContainer />
+                <div className='card border-0 shadow-lg bg-light card mx-auto col-md-8 col-lg-5 col-xl-4 mt-5'>
+                    <div className='card-body p-xl-3 p-lg-4'>
+                        <h3 className='text-center'>Library Management Systems</h3>
+                        <form onSubmit={handleSubmit(onSubmit)} className='p-4'>
+                            {signInfields.map((field, index) => (
+                                <FormField
+                                    key={index}
+                                    field={field}
+                                    register={register}
+                                    errors={errors}
+                                />
+                            ))}
+                            <div className='pt-3'>
+                                <button className="btn btn-secondary col-12 mt-3 rounded-1" type="submit">
+                                    Sign In
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     );
 }
-
 export default SignIn;
