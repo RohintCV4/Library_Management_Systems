@@ -18,6 +18,7 @@ const ProfileUpdate = () => {
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: yupResolver(updateSchema),
   });
+  
 
   useEffect(() => {
     if (userData?.data) {
@@ -36,14 +37,27 @@ const ProfileUpdate = () => {
         address: data.address,
         phoneNumber: data.phoneNumber,
       };
-
+      console.log(updateData);
+  
       await updateVisitors({ id, data: updateData }).unwrap();
-      toast.success('Profile updated successfully!');
+      
+      
+      toast.success('Profile updated successfully!', {
+        autoClose: 1500, 
+      });
+  
       reset(); 
-      navigate(`/library/book/${id}`); 
+  
+     
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500); 
+  
     } catch (error) {
       console.error("Error updating profile:", error);
-      toast.error('Unable to update profile.');
+      toast.error('Unable to update profile.', {
+        autoClose: 1500, 
+      });
     }
   };
 

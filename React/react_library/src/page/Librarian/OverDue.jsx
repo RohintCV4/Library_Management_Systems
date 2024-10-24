@@ -1,8 +1,8 @@
 import React from "react";
-import {useGetVisitorEventListQuery } from "../../redux/services/libApi";
+import {useGetOverDueQuery } from "../../redux/services/libApi";
 
-const PurchasedBook=()=>{
-    const { data: visitor, isLoading, error } = useGetVisitorEventListQuery();
+const OverDue=()=>{
+    const { data: visitor, isLoading, error } = useGetOverDueQuery();
     console.log(visitor);
     
     if (isLoading) {
@@ -17,7 +17,7 @@ const PurchasedBook=()=>{
         <div className="container mt-5">
             <div className="card border-0 shadow-sm rounded-4">
                 <div className="card-header text-center bg-light">
-                    <h3 className="mb-0">Purchased List</h3>
+                    <h3 className="mb-0">Overdue List</h3>
                 </div>
                 <div className="card-body p-4 bg-light">
                     <div className="table-responsive">
@@ -28,9 +28,9 @@ const PurchasedBook=()=>{
                                     <th>Visitors Name</th>
                                     <th>Email</th>
                                     <th>Phone Number</th>
-                                    <th>Created At</th>
+                                    <th>OverDue (Days)</th>
                                     <th>Address</th>
-                                    <th>Current Books</th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>
@@ -40,9 +40,9 @@ const PurchasedBook=()=>{
                                         <td>{val?.name}</td>
                                         <td>{val?.email}</td>
                                         <td>{val?.phoneNumber}</td>
-                                        <td>{new Date(val?.createdAt).toLocaleDateString('en-GB')}</td>
+                                        <td>{val?.overdue}</td>
                                         <td>{val?.address}</td>
-                                        <td>{val?.bookCount}</td>
+                                        
                                     </tr>
                                 ))}
                             </tbody>
@@ -52,5 +52,6 @@ const PurchasedBook=()=>{
             </div>
         </div>
     );
+
 }
-export default PurchasedBook;
+export default OverDue;

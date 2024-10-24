@@ -55,7 +55,7 @@ export const userApi = createApi({
         updateVisitors:build.mutation({
             query:({id,data})=>({
                 url:`user/update-user/${id}`,
-                method: "PUT",
+                method: "POST",
                 body: data,
             }),
             invalidatesTags:['Library']

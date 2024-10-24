@@ -27,7 +27,7 @@ public class UserController {
         return ResponseDTO.builder().data(this.userService.getId(id)).message("User Id Retrieved Successfully").statusCode(200).build();
     }
 
-    @PutMapping("/update-user/{id}")
+    @PostMapping("/update-user/{id}")
     public ResponseDTO updateUser(@PathVariable String id, @RequestBody User user) throws AccountNotFoundException {
         return ResponseDTO.builder().data(this.userService.updateUser(id, user)).message("Updated Successfully").statusCode(200).build();
     }

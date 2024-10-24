@@ -76,5 +76,9 @@ public class EventController {
         return ResponseDTO.builder().data(this.eventService.getUserReturnBook()).message("Retrieved Successfully").statusCode(200).build();
     }
 
+    @GetMapping("/list/overdue")
+    public ResponseDTO getOverDue(){
+        return ResponseDTO.builder().data(this.eventService.getOverdueEvents()).message("Overdue List Retrieved").statusCode(200).build();
+    }
 
 }

@@ -155,7 +155,7 @@ const Navbar = () => {
                     setIsUsernameClicked(true); 
                     toggleDropdown(); 
                   }}>Profile</Link></li>
-                  <li><Link className={`dropdown-item text-black`} to={`/library/profileupdate/${id}`} onClick={() => { 
+                  <li><Link className={`dropdown-item text-black`} to={`/library/aboutus`} onClick={() => { 
                     setIsUsernameClicked(true);
                     toggleDropdown(); 
                   }}>About Us</Link></li>

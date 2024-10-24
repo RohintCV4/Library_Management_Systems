@@ -1,6 +1,8 @@
 package com.management.library.repository;
 
+import com.management.library.dto.OverDueEventDTO;
 import com.management.library.entity.Event;
+import jakarta.persistence.Tuple;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -35,4 +37,12 @@ public interface EventRepository extends JpaRepository<Event, String> {
             "WHERE e.user.role = 'ROLE_VISITOR' AND e.isReturned = false " +
             "GROUP BY e.user")
     List<Object[]> findUserWithEventCount();
+
+    @Query(value = "SELECT u.name, u.email, u.phone_number, DATEDIFF(CURRENT_DATE, e.overdue) AS overdue, u.address " +
+            "FROM event e " +
+            "JOIN user u ON e.user_id = u.id " +
+            "WHERE e.overdue < CURRENT_TIMESTAMP AND e.is_returned = false",
+            nativeQuery = true)
+    List<Object[]> findOverdueEvents();
+
 }

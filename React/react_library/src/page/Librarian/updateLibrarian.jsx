@@ -9,17 +9,17 @@ import {useGetLibrarianQuery, useUpdateLibrarianMutation} from '../../redux/serv
 import { Button, Typography } from '@mui/material';
 
 
-const updateLibrarian=()=>{
+const UpdateLibrarian=()=>{
     const { id } = useParams(); 
-    const navigate = useNavigate();
     
-    const { data: userData, error, isLoading } = useGetLibrarianQuery(id);
+    
+    const { data: userData, error, isLoading,refetch } = useGetLibrarianQuery(id);
     const [updateLibrarian] = useUpdateLibrarianMutation(); 
     
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
       resolver: yupResolver(updateSchema),
     });
-  
+    
     useEffect(() => {
       if (userData?.data) {
         reset({
@@ -31,22 +31,34 @@ const updateLibrarian=()=>{
     }, [userData, reset]);
   
     const dataSubmit = async (data) => {
-      try {
-        const updateData = {
-          name: data.name,
-          address: data.address,
-          phoneNumber: data.phoneNumber,
-        };
-  
-        await updateLibrarian({ id, data: updateData }).unwrap();
-        toast.success('Profile updated successfully!');
-        reset(); 
-        navigate(`/library/book/${id}`); 
-      } catch (error) {
-        console.error("Error updating profile:", error);
-        toast.error('Unable to update profile.');
-      }
-    };
+        try {
+          const updateData = {
+            name: data.name,
+            address: data.address,
+            phoneNumber: data.phoneNumber,
+          };
+          console.log(updateData);
+      
+          await updateLibrarian({ id, data: updateData }).unwrap();
+          
+          toast.success('Profile updated successfully!', {
+            autoClose: 1500, 
+          });
+      
+          reset(); 
+      
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500); 
+      
+        } catch (error) {
+          console.error("Error updating profile:", error);
+          toast.error('Unable to update profile.', {
+            autoClose: 1500, 
+          });
+        }
+      };
   
     if (isLoading) {
       return <div className="text-center mt-5">Loading...</div>; 
@@ -102,4 +114,4 @@ const updateLibrarian=()=>{
       </div>
     );  
 }
-export default updateLibrarian;
+export default UpdateLibrarian;

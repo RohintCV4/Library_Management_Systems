@@ -1,5 +1,6 @@
 package com.management.library.service;
 
+import com.management.library.dto.OverDueEventDTO;
 import com.management.library.dto.VisitorReturnBookDto;
 import com.management.library.entity.Book;
 import com.management.library.entity.Event;
@@ -9,10 +10,12 @@ import com.management.library.repository.BookRepository;
 import com.management.library.repository.EventRepository;
 import com.management.library.repository.UserRepository;
 import com.management.library.utils.Constants;
+import jakarta.persistence.Tuple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -120,5 +123,20 @@ public class EventService {
         }
 
         return visitorReturnBookDtos;
+    }
+
+    public List<OverDueEventDTO> getOverdueEvents() {
+        List<Object[]> results = eventRepository.findOverdueEvents();
+
+
+        return results.stream()
+                .map(obj -> new OverDueEventDTO(
+                        (String) obj[0],
+                        (String) obj[1],
+                        (String) obj[2],
+                        ((Number) obj[3]).longValue(),
+                        (String) obj[4]
+                ))
+                .collect(Collectors.toList());
     }
 }

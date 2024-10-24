@@ -19,11 +19,11 @@ const LibrarianNav=()=>{
   
     const getActiveNavItem = () => {
       const path = location.pathname;
-      if (path.includes('purchase')) return 'purchased';
-      if (path.includes('return')) return 'returned';
-      if (path.includes('profileupdate')) return 'profile'; 
-      if (path.includes('about')) return 'about'; 
-      return 'visitors'; 
+      if (path.includes('purchased')) return 'purchased';
+    if (path.includes('overdue')) return 'overdue';
+    if (path.includes('updatelibrarian')) return 'profile'; 
+    if (path.includes('about')) return 'about'; 
+    return 'librarian'; 
     };
   
     const toggleNavbar = () => {
@@ -98,7 +98,7 @@ const LibrarianNav=()=>{
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
               <li className="nav-item me-5">
                 <Link
-                  className={`nav-link text-dark ${activeNavItem === 'visitors' ? 'active' : ''}`}
+                  className={`nav-link text-dark ${activeNavItem === 'librarian' ? 'active' : ''}`}
                   to={`/librarian/userlist`}
                 >
                   Users
@@ -114,10 +114,10 @@ const LibrarianNav=()=>{
               </li>
               <li className="nav-item me-5">
                 <Link
-                  className={`nav-link text-dark ${activeNavItem === 'returned' ? 'active' : ''}`}
-                  to={`/library/return/${id}`}
+                  className={`nav-link text-dark ${activeNavItem === 'overdue' ? 'active' : ''}`}
+                  to={"/librarian/overdue"}
                 >
-                  Returned
+                  Overdue
                 </Link>
               </li>
               <li
@@ -150,11 +150,11 @@ const LibrarianNav=()=>{
   
                 {isDropdownOpen && (
                   <ul className="dropdown-menu p-2 show bg-secondary">
-                    <li><Link className={`dropdown-item text-black`} to={`/library/profileupdate/${id}`} onClick={() => { 
+                    <li><Link className={`dropdown-item text-black`} to={`/librarian/updatelibrarian/${id}`} onClick={() => { 
                       setIsUsernameClicked(true); 
                       toggleDropdown(); 
                     }}>Profile</Link></li>
-                    <li><Link className={`dropdown-item text-black`} to={`/library/profileupdate/${id}`} onClick={() => { 
+                    <li><Link className={`dropdown-item text-black`} to={`/librarian/aboutus`} onClick={() => { 
                       setIsUsernameClicked(true);
                       toggleDropdown(); 
                     }}>About Us</Link></li>

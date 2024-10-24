@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import UpdateLibrarian from "../../page/Librarian/updateLibrarian";
 
 export const libApi = createApi({
     reducerPath:"libraryApi",
@@ -15,30 +16,7 @@ export const libApi = createApi({
     }),
     tagTypes:['Library'],
     endpoints:(build) => ({
-        addSignupVisitors:build.mutation({
-            query:(createSignup) => ({
-                url:"auth/visitors-signup",
-                method:"POST",
-                body:createSignup,
-            }),
-            invalidatesTags:['Library']
-        }),
-
-
-
-        addLogin:build.mutation({
-            query:(login)=>({
-                url:"auth/login",
-                method:"POST",
-                body:login,
-            }),
-            invalidatesTags:['Library'],
-        }),
-
     
-    
-      
-
         getallvisitors:build.query({
             query:()=>"user/get-data",
             providesTags:['Library']
@@ -50,16 +28,30 @@ export const libApi = createApi({
         }),
 
        
-        updateL:build.mutation({
+        UpdateLibrarian:build.mutation({
             query:({id,data})=>({
                 url:`user/update-user/${id}`,
-                method: "PUT",
+                method: "POST",
                 body: data,
             }),
             invalidatesTags:['Library']
         }),
 
+        getLibrarian:build.query({
+            query:(id) =>({
+                url:`user/account/${id}`,
+                method : "GET",
+                providesTags:['Library']
+            }),
+                 
+        }),
+
+        getOverDue:build.query({
+            query:()=>"event/list/overdue",
+            providesTags:['Library']
+        }),
+
 
     })
 })
-export const {useAddSignupVisitorsMutation,useAddLoginMutation,useGetallvisitorsQuery,useGetVisitorEventListQuery}=libApi;
+export const {useGetallvisitorsQuery,useGetVisitorEventListQuery,useUpdateLibrarianMutation,useGetLibrarianQuery,useGetOverDueQuery}=libApi;
