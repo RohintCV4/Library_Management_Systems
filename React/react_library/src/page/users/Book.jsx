@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useAddborrowbookMutation, useGetBooksQuery, useGetPurchaseQuery, useGetsearchPracticeTestQuery,  } from '../redux/services/libApi';
+import { useAddborrowbookMutation, useGetBooksQuery, useGetPurchaseQuery, useGetsearchPracticeTestQuery,  } from '../../redux/services/libApi';
 import { useNavigate, useParams } from 'react-router-dom';
-import '../asset/css/Book.css';
+import '../../asset/css/Book.css';
 import { Box, Button, Rating, Typography } from '@mui/material';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Stack } from 'react-bootstrap';

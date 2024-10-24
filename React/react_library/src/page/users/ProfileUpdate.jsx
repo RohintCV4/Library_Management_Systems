@@ -4,8 +4,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { updateSchema } from '../constant'; 
-import { useGetVisitorsQuery, useUpdateVisitorsMutation } from '../redux/services/libApi';
+import { updateSchema } from '../../constant/index'; 
+import { useGetVisitorsQuery, useUpdateVisitorsMutation } from '../../redux/services/libApi';
 import { Button, Typography } from '@mui/material';
 
 const ProfileUpdate = () => {

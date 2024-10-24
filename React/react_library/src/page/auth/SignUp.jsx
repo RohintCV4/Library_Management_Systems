@@ -3,10 +3,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import FormField from '../component/FormField';
-import { signUpfields, signupSchema } from '../constant';
+import FormField from '../../component/FormField';
+import { signUpfields, signupSchema } from '../../constant';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAddSignupVisitorsMutation } from '../redux/services/libApi';
+import { useAddSignupVisitorsMutation } from '../../redux/services/libApi';
 
 const SignUp = () => {
     const [signup] = useAddSignupVisitorsMutation();

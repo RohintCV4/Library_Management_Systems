@@ -1,5 +1,4 @@
 import * as yup from 'yup';
-//
 
 export const signUpfields = [
   { label: "Name", type: "text", name: "name", placeholder: "Enter Name" },

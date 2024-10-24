@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useGetPurchaseQuery, useAddRatingBookMutation } from '../redux/services/libApi';
-import '../asset/css/purchase.css';
+import { useGetPurchaseQuery, useAddRatingBookMutation } from '../../redux/services/libApi';
+import '../../asset/css/purchase.css';
 import { Rating } from '@mui/material';
 
 const Purchase = () => {

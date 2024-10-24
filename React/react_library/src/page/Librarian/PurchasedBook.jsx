@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useGetallvisitorsQuery, useGetPurchaseQuery, useGetVisitorEventListQuery } from "../redux/services/libApi";
+import React from "react";
+import {useGetVisitorEventListQuery } from "../../redux/services/libApi";
 
-const UserProfiles = () => {
-    const [user, setUser] = useState(null);
+const PurchasedBook=()=>{
     const { data: visitor, isLoading, error } = useGetVisitorEventListQuery();
     console.log(visitor);
     
@@ -53,6 +52,5 @@ const UserProfiles = () => {
             </div>
         </div>
     );
-};
-
-export default UserProfiles;
+}
+export default PurchasedBook;

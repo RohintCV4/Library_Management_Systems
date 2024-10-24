@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import '../asset/css/Navbar.css';
+import '../../asset/css/Navbar.css';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,7 +24,7 @@ const Navbar = () => {
     if (path.includes('return')) return 'returned';
     if (path.includes('profileupdate')) return 'profile'; 
     if (path.includes('about')) return 'about'; 
-    return 'home'; 
+    return 'dashboard'; 
   };
 
   const toggleNavbar = () => {
@@ -99,7 +99,7 @@ const Navbar = () => {
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
             <li className="nav-item me-5">
               <Link
-                className={`nav-link text-dark ${activeNavItem === 'home' ? 'active' : ''}`}
+                className={`nav-link text-dark ${activeNavItem === 'dashboard' ? 'active' : ''}`}
                 to={`/library/book/${id}`}
               >
                 Dashboard
