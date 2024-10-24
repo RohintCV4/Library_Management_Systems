@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import FormField from '../../component/FormField';
 import { signInSchema, signInfields } from '../../constant';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAddLoginMutation } from '../../redux/services/libApi';
+import { useAddLoginMutation } from '../../redux/services/authApi';
 
 const SignIn = () => {
     const navigate = useNavigate();

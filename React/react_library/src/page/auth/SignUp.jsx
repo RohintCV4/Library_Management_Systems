@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import FormField from '../../component/FormField';
 import { signUpfields, signupSchema } from '../../constant';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAddSignupVisitorsMutation } from '../../redux/services/libApi';
+import { useAddSignupVisitorsMutation } from '../../redux/services/authApi';
 
 const SignUp = () => {
     const [signup] = useAddSignupVisitorsMutation();

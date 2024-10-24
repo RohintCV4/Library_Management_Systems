@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { updateSchema } from '../../constant/index'; 
-import { useGetVisitorsQuery, useUpdateVisitorsMutation } from '../../redux/services/libApi';
+import { useGetVisitorsQuery, useUpdateVisitorsMutation } from '../../redux/services/userApi';
 import { Button, Typography } from '@mui/material';
 
 const ProfileUpdate = () => {
