@@ -15,6 +15,30 @@ export const libApi = createApi({
     }),
     tagTypes:['Library'],
     endpoints:(build) => ({
+        addSignupVisitors:build.mutation({
+            query:(createSignup) => ({
+                url:"auth/visitors-signup",
+                method:"POST",
+                body:createSignup,
+            }),
+            invalidatesTags:['Library']
+        }),
+
+
+
+        addLogin:build.mutation({
+            query:(login)=>({
+                url:"auth/login",
+                method:"POST",
+                body:login,
+            }),
+            invalidatesTags:['Library'],
+        }),
+
+    
+    
+      
+
         getallvisitors:build.query({
             query:()=>"user/get-data",
             providesTags:['Library']
@@ -25,16 +49,8 @@ export const libApi = createApi({
             providesTags:['Library']
         }),
 
-        getLibrarian:build.query({
-            query:(id) =>({
-                url:`user/account/${id}`,
-                method : "GET",
-                providesTags:['Library']
-            }),
-                 
-        }),
        
-        updateLibrarian:build.mutation({
+        updateL:build.mutation({
             query:({id,data})=>({
                 url:`user/update-user/${id}`,
                 method: "PUT",
@@ -46,4 +62,4 @@ export const libApi = createApi({
 
     })
 })
-export const {useUpdateLibrarianMutation,useGetallvisitorsQuery,useGetVisitorEventListQuery,useGetLibrarianQuery}=libApi;
+export const {useAddSignupVisitorsMutation,useAddLoginMutation,useGetallvisitorsQuery,useGetVisitorEventListQuery}=libApi;

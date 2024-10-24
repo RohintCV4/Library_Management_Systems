@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import FormField from '../../component/FormField';
-import { signInSchema, signInfields } from '../../constant';
+import { signInSchema, signInfields } from '../../constant/index';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAddLoginMutation } from '../../redux/services/authApi';
 
@@ -20,52 +20,53 @@ const SignIn = () => {
         localStorage.removeItem('Token');
     }, []);
 
+
     const onSubmit = async (data) => {
+     
+        
         try {
-            const result = await login(data);
+            const result = await login(data).unwrap(); // unwrap to handle success/error more easily
+    
+            if (!result || !result.token) {
+                toast.error("Invalid email or password. Please try again.", { autoClose: 1500 });
+                return;
+            }
+    
+            const token = result.token;
+
+         
             
-            if (result.error) {
-                toast.error("Email or password is incorrect. Please try again.", { autoClose: 1500 });
-                return;
-            }
-
-            const token = result?.data?.token;
-            if (!token) {
-                toast.error("No token received. Please try again.", { autoClose: 1500 });
-                return;
-            }
-
+    
+            // Store token and show success message
             localStorage.setItem('Token', token);
             toast.success("Login done Successfully", { autoClose: 500 });
-
+    
+            // Process token payload
             const tokenParts = token.split('.');
             if (tokenParts.length === 3) {
                 const payloadBase64 = tokenParts[1];
                 const decodedPayload = atob(payloadBase64);
                 const payload = JSON.parse(decodedPayload);
-
+    
                 const userId = payload.user_id;
                 const userRole = payload.role;
-
-                console.log('User ID:', userId);
-                console.log('User Role:', userRole);
-
+    
                 // Navigate based on user role
-                if (userRole === "ROLE_VISITOR") {
-                    setTimeout(() => {
+                setTimeout(() => {
+                    if (userRole === "ROLE_VISITOR") {
                         navigate(`/library/book/${userId}`);
-                    }, 1501);
-                } else {
-                    setTimeout(() => {
+                    } else {
                         navigate(`/librarian/userlist`);
-                    }, 1501);
-                }
+                    }
+                }, 1501);
             } else {
                 toast.error("Invalid token format.", { autoClose: 1500 });
             }
-
-            reset();
+    
+            reset(); // Clear form after success
+    
         } catch (error) {
+            // Handle network or server errors properly
             if (error.response) {
                 toast.error("Server responded with an error. Please try again.", { autoClose: 1500 });
             } else if (error.request) {
@@ -75,6 +76,7 @@ const SignIn = () => {
             }
         }
     };
+    
 
     return (
         <div className='image1'> 
